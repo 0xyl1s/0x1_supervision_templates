@@ -24,7 +24,7 @@
 SHELL='/bin/bash'
 MAILTO='epima@3eclipses.com'
 
-*/5 * * * * source ~/.bashrc ; ec1.sync_pull > /dev/null 2>&1
+0 * * * * source ~/.bashrc ; ec1.sync_pull >> ~/.ec1/00mu/00logs/cron_ec1.sync_pull 2>&1
 
 #redirecting standard output to /dev/null allow to send email only for errors
 #* * * * * source ~/.bashrc ; ec1.update > /dev/null
