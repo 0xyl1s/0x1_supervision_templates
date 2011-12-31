@@ -1,0 +1,1 @@
+../../../00sourcing/ec1_xtra_livelinks/vim/7.x/ub11.04_x86_64/.vimrc/root_standard_01/.vimrc

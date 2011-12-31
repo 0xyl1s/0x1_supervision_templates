@@ -1,0 +1,95 @@
+ufw allow 10692/tcp
+ufw enable
+
+cp sshd_config sshd_config_00ori
+vim sshd_config
+/etc/init.d/ssh restart
+
+ssh-keygen;
+
+ssh-copy-id '-p10632 root.0069@192.168.122.1' &&
+ssh-copy-id '-p10632 e3pblank@heliv005.helianova.com';
+
+echo "dash dash/sh boolean false"| debconf-set-selections; dpkg-reconfigure -f noninteractive dash;
+groupadd helianova;
+mkdir /00transfert;
+chmod 2770 /00transfert;
+chown root:helianova /00transfert;
+mkdir /.ec1;
+chgrp helianova /.ec1;
+chmod 2755 /.ec1;
+rsync -av --no-o --no-g --rsh='ssh -p10632' root.0069@192.168.122.1:/data1/.-.helianova/._.helia09/_._helia090001/00system/01/ /.ec1/ &&
+mv /etc/network/interfaces /etc/network/interfaces_00ori;
+ln -s /.ec1/network/00livelinks/interfaces/interfaces /etc/network/;
+mv /etc/udev/rules.d/70-persistent-net.rules /etc/udev/rules.d/70-persistent-net.rules_00ori;
+ln -s /.ec1/udev/00livelinks/70-persistent-net.rules/70-persistent-net.rules /etc/udev/rules.d/;
+mkdir -p /helianova/global01/hub;
+chgrp -R helianova /helianova;
+chmod -R 2750 /helianova/;
+chmod 2770 /helianova/global01/hub
+ln -s /.ec1/network/00livelinks/sshfs_shares/sshfs_shares /etc/network/;
+ln -s /.ec1/network/00livelinks/if-up.d_sshfs/sshfs /etc/network/if-up.d/;
+ln -s /.ec1/network/00livelinks/if-down.d_sshfs/sshfs /etc/network/if-down.d/;
+mv /etc/pam.d/common-session /etc/pam.d/common-session_00ori;
+ln -s /.ec1/pam.d/00livelinks/common-session/common-session /etc/pam.d/;
+mv /etc/profile /etc/profile_00ori;
+ln -s /.ec1/bash/00livelinks/etc_profile/profile /etc/;
+mv /etc/bash.bashrc /etc/bash.bashrc_00ori;
+ln -s /.ec1/bash/00livelinks/bash.bashrc/bash.bashrc /etc/;
+mkdir $HOME/.ec1;
+chmod 2770 $HOME/.ec1;
+rsync -av --no-o --no-g --rsh='ssh -p10632' root.0069@192.168.122.1:/data1/.-.helianova/._.helia09/_._helia090001$HOME/01/ $HOME/.ec1/ &&
+mv $HOME/.profile $HOME/.profile_00ori;
+ln -s $HOME/.ec1/bash/00livelinks/.profile/.profile $HOME/;
+reboot;
+
+mv /etc/apt/sources.list /etc/apt/sources.list_00ori;
+ln -s /.ec1/apt/00livelinks/sources.list/sources.list /etc/apt/;
+apt-get update;
+apt-get upgrade -y &&
+apt-get install linux-headers-server linux-image-server linux-server -y &&
+reboot;
+
+echo 'postfix postfix/main_mailer_type        select  Internet Site' | debconf-set-selections;
+echo 'postfix postfix/mailname        string  helis002.helianova.net' | debconf-set-selections;
+apt-get install ntp openvpn sshfs git-core shorewall debconf-utils mc tar gzip lzma rar unrar bzip2 arj lha rpm unace zip unzip p7zip vim exuberant-ctags clamav alsa-utils ncdu htop ttf-ubuntu-font-family ttf-droid ttf-liberation screen curl build-essential libreadline6-dev postfix mailutils -y &&
+apt-get clean &&
+bash < <(curl -B http://rvm.beginrescueend.com/install/rvm) &&
+chmod 664 /etc/rvmrc &&
+mv $HOME/.bashrc $HOME/.bashrc_00ori &&
+ln -s $HOME/.ec1/bash/00livelinks/.bashrc/.bashrc $HOME/ &&
+ln -s $HOME/.ec1/ssh/00livelinks/config/config $HOME/.ssh/ &&
+ln -s $HOME/.ec1/screen/00livelinks/.screenrc/.screenrc $HOME/ &&
+mkdir $HOME/.mc &&
+ln -s $HOME/.ec1/mc/00livelinks/ini/ini $HOME/.mc/ &&
+ln -s $HOME/.ec1/mc/00livelinks/bindings/bindings $HOME/.mc/ &&
+exit;
+
+mv /etc/fstab /.ec1/mount/00livelinks/fstab/;
+ln -s /.ec1/mount/00livelinks/fstab/fstab /etc/;
+cat /.ec1/mount/00shares/helianova >> /.ec1/mount/00livelinks/fstab/fstab;
+mount /helianova/global01/hub;
+ll /helianova/global01/hub;
+rvm package install zlib;
+rvm package install readline;
+rvm package install openssl;
+rvm install 1.9.2 -C --with-zlib-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr --with-openssl-dir=$rvm_path/usr;
+rvm --default 1.9.2;
+ln -s $HOME/.ec1/shorewall/00livelinks/00configs/01/hl1 /etc/shorewall/;
+mv /etc/shorewall/shorewall.conf /etc/shorewall/shorewall.conf_00ori;
+ln -s $HOME/.ec1/shorewall/00livelinks/shorewall.conf/shorewall.conf /etc/shorewall/;
+ufw disable;
+shorewall start;
+mv /etc/default/shorewall /etc/default/shorewall_00ori;
+ln -s $HOME/.ec1/shorewall/00livelinks/etc_default/shorewall /etc/default/;
+mv /etc/ssh/sshd_config /etc/ssh/sshd_config_inter;
+ln -s /.ec1/ssh/00livelinks/sshd_config/sshd_config /etc/ssh/;
+/etc/init.d/ssh restart;
+deluser --remove-all-files "erase";
+groupadd e3pblank;
+useradd "e3pblank" -g "e3pblank" -G "helianova,audio,video,cdrom" -s "/bin/bash" -m;
+passwd e3pblank;
+
+reboot;
+
+# vim: ft=sh
