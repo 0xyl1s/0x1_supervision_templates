@@ -1,12 +1,11 @@
 
+source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/00shells/ub11.04_x86_64/exec/umask/007
+
 source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/00shells/ub11.04_x86_64/00combos/interactive_nonlogin/standard_01/shell_combo_interactive_nonlogin
 source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/bash/4.x/ub11.04_x86_64/00combos/interactive_nonlogin/standard_01/bash_combo_interactive_nonlogin
 
 source ~/.ec1/00mu/00sourcing/ec1_xtra_livelinks/00shells/ub11.04_x86_64/00combos/interactive_nonlogin/v1/shell_combo_interactive_nonlogin
 source ~/.ec1/00mu/00sourcing/ec1_xtra_livelinks/bash/4.x/ub11.04_x86_64/00combos/interactive_nonlogin/v1/bash_combo_interactive_nonlogin
 
-alias e.vnc='vncserver :6 -geometry 1920x1080 -depth 24 -dpi 100'
-alias e.vnc_restart='vncserver -kill :6 ; vncserver :6 -geometry 1920x1080 -depth 24 -dpi 100'
-alias e.vnc_stop='vncserver -kill :6'
 
 # vim: ft=sh
