@@ -1,1 +1,1 @@
-../../../00sourcing/ec1_core_livelinks/bash/4.x/ub11.04_x86_64/.profile/minimal_01/.profile
+../../../00sourcing/ec1_core_livelinks/ub11.04_x86_64/bash/.profile/minimal_01/.profile

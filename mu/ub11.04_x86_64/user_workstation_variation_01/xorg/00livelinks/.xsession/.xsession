@@ -1,1 +1,1 @@
-../../../00sourcing/ec1_xtra_livelinks/xorg/7.x/ub11.04_x86_64/.xsession/standard_01/.xsession
+../../../00sourcing/ec1_xtra_livelinks/ub11.04_x86_64/xorg/.xsession/variation_01/.xsession
