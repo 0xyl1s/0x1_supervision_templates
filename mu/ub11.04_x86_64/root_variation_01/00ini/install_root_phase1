@@ -79,7 +79,7 @@ echo "root ec1 base installation finished: please copy ssh certificates to $ec1_
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
 # ____________________________________________________________________
-# ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ  LIBRE CULTURE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ
+# ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
 # This file is part of the libre project Epiculture, distributed under
 # the GNU GPLv3 license ( www.epiculture.org/ec1_core/LICENSE )
 # Copyright 2005-2012 Pierre-Mael Cretinon
