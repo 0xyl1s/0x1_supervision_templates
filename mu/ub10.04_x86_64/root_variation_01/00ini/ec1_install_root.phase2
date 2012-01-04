@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# bash < <(curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/install_root.phase2)
+# cd $HOME/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash $HOME/.ec1_erase/ec1_install_root.phase2
+
 umask 007
 
 ec1_user_basedir="$HOME/.ec1"
