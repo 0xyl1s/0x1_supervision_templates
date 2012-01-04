@@ -76,7 +76,7 @@ SUBSYSLOCK=""
 
 MODULESDIR=
 
-CONFIG_PATH=/etc/shorewall/ec1:/etc/shorewall:/usr/share/shorewall
+CONFIG_PATH=/etc/shorewall:/usr/share/shorewall
 
 RESTOREFILE=
 

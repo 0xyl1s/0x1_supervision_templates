@@ -13,3 +13,4 @@
 ###############################################################################
 #ZONE	INTERFACE	BROADCAST	OPTIONS
 net     eth0            detect          dhcp,tcpflags,logmartians,nosmurfs
+net     virbr0          detect          dhcp,tcpflags,logmartians,nosmurfs

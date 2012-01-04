@@ -1,5 +1,5 @@
 #
-# Shorewall version 4.0 - Sample Interfaces File for one-interface configuration.
+# Shorewall version 4.0 - Sample Policy File for one-interface configuration.
 # Copyright (C) 2006 by the Shorewall Team
 #
 # This library is free software; you can redistribute it and/or
@@ -8,8 +8,11 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 # See the file README.txt for further details.
-#------------------------------------------------------------------------------
-# For information about entries in this file, type "man shorewall-interfaces"
+#-----------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-policy"
 ###############################################################################
-#ZONE	INTERFACE	BROADCAST	OPTIONS
-net     eth0            detect          dhcp,tcpflags,logmartians,nosmurfs
+#SOURCE		DEST		POLICY		LOG LEVEL	LIMIT:BURST
+$FW		net		ACCEPT
+net		all		DROP		info
+# The FOLLOWING POLICY MUST BE LAST
+all		all		REJECT		info

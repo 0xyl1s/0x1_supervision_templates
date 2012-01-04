@@ -4,21 +4,17 @@
 umask 007
 
 ec1_user_basedir="$HOME/.ec1"
-ec1_user_mu_basedir="$xHOME/.ec1/00mu"
+ec1_user_mu_basedir="$HOME/.ec1/00mu"
 
-check_directories=(
-		$ec1_user_basedir
-		$HOME/.ssh
-		)
-
-for check_directory in ${check_directories[@]}
-do
-    if [[ -d $check_directory ]]
-    then
-	echo "ERROR: directory $check_directory exists already"
-	exit 1
-    fi
-done
+if [[ -d $ec1_user_basedir ]]
+then
+    echo "ERROR: directory $ec1_user_basedir exists already"
+    exit 1
+fi
+if [[ -d $HOME/.ssh ]]
+then
+    mv $HOME/.ssh $HOME/.ssh__pre-ec1
+fi
 
 mkdir -p $ec1_user_mu_basedir
 echo "created dir $ec1_user_mu_basedir"
@@ -41,6 +37,7 @@ done
 
 rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/mu/ub10.04_x86_64/root_variation_01/ $ec1_user_mu_basedir/
 rm -R $ec1_user_basedir/ec1_supervision_templates
+chmod 600 $ec1_user_mu_basedir
 
 mkdir $HOME/.ssh
 chmod 700 $HOME/.ssh
@@ -51,6 +48,9 @@ ln -s $ec1_user_mu_basedir/openssh/00livelinks/config/config $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
+echo -n "SSH access public key ? "
+read ssh_access_public_key
+echo "$ssh_access_public_key" >> $HOME/.ssh/authorized_keys
 #bash
 mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
 ln -s $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile $HOME/
@@ -77,6 +77,8 @@ touch $ec1_user_mu_basedir/.ec1_pre-stage2
 echo "root ec1 base installation finished: please copy ssh certificates to $ec1_user_mu_basedir/openssh/00certificates/"
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
+exit
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
