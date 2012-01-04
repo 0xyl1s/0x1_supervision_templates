@@ -1,0 +1,12 @@
+
+source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/ub10.04_x86_64/00shells/00combos/interactive_nonlogin/variation_01/shell_combo_interactive_nonlogin
+source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/ub10.04_x86_64/bash/00combos/interactive_nonlogin/variation_01/bash_combo_interactive_nonlogin
+
+source ~/.ec1/00mu/00sourcing/ec1_xtra_livelinks/ub10.04_x86_64/00shells/00combos/interactive_nonlogin/v1/shell_combo_interactive_nonlogin
+source ~/.ec1/00mu/00sourcing/ec1_xtra_livelinks/ub10.04_x86_64/bash/00combos/interactive_nonlogin/v1/bash_combo_interactive_nonlogin
+
+source ~/.ec1/00mu/00sourcing/ec1_core_livelinks/ub10.04_x86_64/00shells/exec/umask/007
+
+alias e_data1='cryptsetup luksOpen /dev/sda4 data1 ; mount /dev/mapper/data1 /data1/ ; ll /data1'
+
+# vim: ft=sh
