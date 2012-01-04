@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+umask 007
+
+ec1_user_basedir="$HOME/.ec1"
+ec1_user_mu_basedir="$xHOME/.ec1/00mu"
+
+check_directories=(
+		$ec1_user_basedir
+		$HOME/.ssh
+		)
+
+for check_directory in ${check_directories[@]}
+do
+    if [[ -d $check_directory ]]
+    then
+	echo "ERROR: directory $check_directory exists already"
+	exit 1
+    fi
+done
+
+mkdir -p $ec1_user_mu_basedir
+echo "created dir $ec1_user_mu_basedir"
+cd $ec1_user_basedir
+
+repositories=(
+	ec1_lib
+	ec1_core
+	ec1_core_livelinks
+	ec1_xtra
+	ec1_xtra_livelinks
+	ec1_supervision_templates
+	)
+
+for repository in ${repositories[@]}
+do
+    echo "cloning git://github.com/epiculture/${repository}.git"
+    git clone git://github.com/epiculture/${repository}.git
+done
+
+rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/mu/ub11.04_x86_64/root_variation_01/ $ec1_user_mu_basedir/
+
+rm -R $ec1_user_basedir/ec1_supervision_templates
+
+mkdir $HOME/.ssh
+chmod 700 $HOME/.ssh
+echo "created dir $HOME/.ssh"
+
+#openssh
+ln -s $ec1_user_mu_basedir/openssh/00livelinks/config/config $HOME/.ssh/
+ln -s $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys $HOME/.ssh/
+ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
+ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
+#bash
+mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
+ln -s $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile $HOME/
+mv $HOME/.bashrc $ec1_user_mu_basedir/bash/00livelinks/.bashrc/.bashrc_00ori
+ln -s $ec1_user_mu_basedir/bash/00livelinks/.bashrc/.bashrc $HOME/
+#mc
+mkdir $HOME/.mc
+ln -s $ec1_user_mu_basedir/mc/00livelinks/ini/ini $HOME/.mc/
+ln -s $ec1_user_mu_basedir/mc/00livelinks/bindings/bindings $HOME/.mc/
+#screen
+ln -s $ec1_user_mu_basedir/screen/00livelinks/.screenrc/.screenrc $HOME/
+#rvm
+ln -s $ec1_user_mu_basedir/rvm/00livelinks/.rvmrc/.rvmrc ~/
+#git
+ln -s $ec1_user_mu_basedir/git/00livelinks/.gitconfig/.gitconfig $HOME/
+#vim
+ln -s $ec1_user_mu_basedir/vim/00livelinks/.vim/.vim $HOME/
+ln -s $ec1_user_mu_basedir/vim/00livelinks/.vimrc/.vimrc $HOME/
+
+ln -s $ec1_user_mu_basedir/.recycle $HOME/
+
+touch $ec1_user_mu_basedir/.ec1_pre-stage2
+
+echo "root ec1 base installation finished: please copy ssh certificates to $ec1_user_mu_basedir/openssh/00certificates/"
+
+bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
+# ____________________________________________________________________
+# ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
+# This file is part of the libre project Epiculture, distributed under
+# the GNU GPLv3 license ( www.epiculture.org/ec1_core/LICENSE )
+# Copyright 2005-2012 Pierre-Mael Cretinon
+# ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# vim: ft=sh
