@@ -44,7 +44,11 @@ do
     git clone git://github.com/epiculture/${repository}.git
 done
 
+#DEBUG: removing the sleeps
+sleep 20
 rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/mu/ub10.04_x86_64/root_variation_01/ $ec1_user_mu_basedir/
+sleep 20
+
 rm -R $ec1_user_basedir/ec1_supervision_templates
 
 mkdir $HOME/.ssh
