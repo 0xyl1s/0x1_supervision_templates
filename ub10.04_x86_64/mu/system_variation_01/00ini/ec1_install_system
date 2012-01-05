@@ -13,9 +13,9 @@ fi
 
 ec1_user_home=${EC1__USER_HOME}
 ec1_user_inidir="${ec1_user_home}/.ec1.ini"
+ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 
-
-date > ${ec1_user_inidir}/logs/ec1.ini.system.0
+date > ${ec1_user_ini_logsdir}/ec1.ini.system.0
 
 ec1_system_basedir='/.ec1'
 
@@ -84,7 +84,7 @@ mkdir /00transfert
 chgrp ec1_local /00transfert
 chmod 770 /00transfert
 
-date > ${ec1_user_inidir}/logs/ec1.ini.system.1
+date > ${ec1_user_ini_logsdir}/ec1.ini.system.1
 
 reboot
 sleep 10

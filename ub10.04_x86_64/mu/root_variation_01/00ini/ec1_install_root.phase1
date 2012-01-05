@@ -13,16 +13,17 @@ fi
 ec1_user_home=${EC1__USER_HOME}
 
 ec1_user_inidir="${ec1_user_home}/.ec1.ini"
+ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 ec1_user_basedir="${ec1_user_home}/.ec1"
 ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
 
-if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]]
+if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.1 ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.system.1 home = ${ec1_user_home}"
+    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_ini_logsdir}/ec1.ini.system.1 home = ${ec1_user_home}"
     exit 1
 fi
 
-date > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.0
+date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.0
 
 if [[ -d ${ec1_user_basedir} ]]
 then
@@ -97,11 +98,11 @@ ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
 chmod -R go= ${ec1_user_basedir}
 
-cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mkdir ${ec1_user_basedir}/.to_cluster ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
+(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mkdir ${ec1_user_basedir}/.to_cluster ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
-date > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1
+date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1
 
 #TODO: just exit instead of reboot
 #reboot
