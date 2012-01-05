@@ -5,7 +5,7 @@ umask 027
 ufw allow 22/tcp
 ufw --force enable
 
-ec1_user_inidir='$HOME/.ec1.ini'
+ec1_user_inidir="$HOME/.ec1.ini"
 
 date > $ec1_user_inidir/logs/ec1.ini.system_ini.0
 

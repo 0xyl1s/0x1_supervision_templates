@@ -3,7 +3,7 @@
 
 umask 077
 
-ec1_user_inidir='$HOME/.ec1.ini'
+ec1_user_inidir="$HOME/.ec1.ini"
 ec1_user_basedir="$HOME/.ec1"
 ec1_user_mu_basedir="$HOME/.ec1/00mu"
 
@@ -87,6 +87,7 @@ bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-i
 
 date > $ec1_user_inidir/logs/ec1.ini.root_phase1.1
 
+#TODO: just exit instead of reboot
 reboot
 
 # ____________________________________________________________________
