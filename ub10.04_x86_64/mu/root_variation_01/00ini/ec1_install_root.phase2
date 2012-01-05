@@ -39,8 +39,7 @@ if $(rvm use 1.9.3 --default)
     echo "rvm 1.9.3 installed as default" >> $ec1_user_inidir/rvm_install.log
 fi
 
-echo -n "ec1_machine_ssh_port ? "
-read ec1_machine_ssh_port
+ec1_machine_ssh_port=$(cat $ec1_user_inidir/ec1_machine_ssh_port.ini)
 
 #openssh
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"$ec1_machine_ssh_port\")" $ec1_user_mu_basedir/openssh/00livelinks/etc_sshd_config/sshd_config;
