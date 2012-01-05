@@ -50,7 +50,7 @@ ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
 echo -n "SSH access public key ? "
 read ssh_access_public_key
-echo -n "$ssh_access_public_key" >> $HOME/.ssh/authorized_keys
+echo -n "$ssh_access_public_key" > $HOME/.ssh/authorized_keys
 #bash
 mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
 ln -s $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile $HOME/
