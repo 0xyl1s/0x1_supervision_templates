@@ -3,7 +3,7 @@
 
 umask 077
 
-ec1_user_inidir='/.ec1.ini'
+ec1_user_inidir="/root/.ec1.ini"
 
 #adding script to rc.local
 
