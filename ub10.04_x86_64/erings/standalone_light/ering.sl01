@@ -19,7 +19,6 @@ then
     exit 1
 fi
 
-
 ec1_data_files=(
 	${ec1_user_inidir}/00data/hostname.ini
 	${ec1_user_inidir}/00data/authorized_keys.ini
@@ -35,25 +34,23 @@ do
     fi
 done
 
-
-#adding warning to .bash_login
-if [[ -f ${ec1_user_home}/.bash_login ]]
-then
-    echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already."
-    exit 1
-fi
-
-cat <<EC1HEREDOC > ${ec1_user_home}/.bash_login
-
-echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.sl01\n\n\n"
-
-EC1HEREDOC
-chmod 600 ${ec1_user_home}/.bash_login
-
 aptitude install curl git-core -y
 
 if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]]
 then
+    #adding warning to .bash_login
+    if [[ -f ${ec1_user_home}/.bash_login ]]
+    then
+	echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already."
+	exit 1
+    fi
+
+    cat <<-EC1HEREDOC > ${ec1_user_home}/.bash_login
+
+    echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.sl01\n\n\n"
+
+    EC1HEREDOC
+    chmod 600 ${ec1_user_home}/.bash_login
     cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_system > ${ec1_user_inidir}/logs/ec1.ini.system.log 2>${ec1_user_inidir}/logs/ec1.ini.system.error
 fi
 
