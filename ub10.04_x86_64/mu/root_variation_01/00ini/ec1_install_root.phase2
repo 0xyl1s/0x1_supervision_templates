@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# cd ${HOME}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${HOME}/.ec1_erase/ec1_install_root.phase2
+# cd ${ec1_user_home}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${ec1_user_home}/.ec1_erase/ec1_install_root.phase2
 
 umask 077
 
@@ -18,7 +18,7 @@ ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
 
 if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase2 until ec1.ini.root_phase1.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 home = ${HOME}"
+    echo "ERROR: can't get to ec1.ini.root_phase2 until ec1.ini.root_phase1.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 home = ${ec1_user_home}"
     exit 1
 fi
 
@@ -36,7 +36,7 @@ fi
 #cf rvm requirements
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
 #TODO: only source ~/.bashrc
-[[ -s "${HOME}/.rvm/scripts/rvm" ]] && . "${HOME}/.rvm/scripts/rvm" # Load RVM function
+[[ -s "${ec1_user_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
 [[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
 #rvm install 1.8.7
 #rvm use 1.8.7 --default
