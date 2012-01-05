@@ -17,6 +17,8 @@ fi
 if [[ ! -f $ec1_user_inidir/logs/ec1.ini.root_phase1.1 ]]
 then
     curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 | bash > $ec1_user_inidir/logs/ec1.ini.root_phase1.log 2>$ec1_user_inidir/logs/ec1.ini.root_phase1.error
+    sleep 10
+    bash /root/.ec1.ini/ering.sl01
 fi
 
 if [[ ! -f $ec1_user_inidir/logs/ec1.ini.root_phase2.1 ]]
