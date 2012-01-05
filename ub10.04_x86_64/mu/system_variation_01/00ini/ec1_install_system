@@ -34,9 +34,7 @@ do
     git clone git://github.com/epiculture/${repository}.git
 done
 
-sleep 20
-rsync -avh --no-o --no-g --stats $ec1_system_basedir/ec1_supervision_templates/mu/ub10.04_x86_64/system_variation_01/ $ec1_system_basedir/00mu/
-sleep 20
+rsync -avh --no-o --no-g --stats $ec1_system_basedir/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ $ec1_system_basedir/00mu/
 
 rm -R $ec1_system_basedir/ec1_supervision_templates
 
