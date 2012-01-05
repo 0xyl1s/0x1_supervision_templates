@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # cd $HOME/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash $HOME/.ec1_erase/ec1_install_root.phase2
 
-source ~/.bashrc
-
 umask 077
 
 ec1_user_inidir="$HOME/.ec1.ini"
@@ -28,15 +26,18 @@ fi
 #ruby
 #cf rvm requirements
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
+#TODO: only source ~/.bashrc
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
 rvm install 1.8.7
 rvm use 1.8.7 --default
-if $(rvm use 1.8.7 --default)
-    echo "rvm 1.8.7 installed as default" >> $ec1_user_inidir/logs/rvm_install
-fi
 rvm install 1.9.3
 rvm use 1.9.3 --default
-if $(rvm use 1.9.3 --default)
-    echo "rvm 1.9.3 installed as default" >> $ec1_user_inidir/logs/rvm_install
+
+if [ -z "$RUBY_VERSION" ]
+then
+    echo "no ruby ..."
+    exit 1
 fi
 
 ec1_machine_ssh_port=$(cat $ec1_user_inidir/ec1_machine_ssh_port.ini)
