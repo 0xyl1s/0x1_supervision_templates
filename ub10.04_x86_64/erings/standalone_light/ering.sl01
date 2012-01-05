@@ -67,7 +67,7 @@ fi
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1 ]]
 then
     mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
-    mv ${ec1_user_inidir} ${HOME}/.ec1/.ini
+    mv ${ec1_user_inidir} ${HOME}/.ec1/.ini_install
 fi
 
 

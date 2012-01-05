@@ -25,6 +25,7 @@ SHELL='/bin/bash'
 MAILTO='epima@3eclipses.com'
 
 0 * * * * source ~/.bashrc ; ec1.sync_pull >> ~/.ec1/00mu/00logs/cron_ec1.sync_pull 2>&1
+0 2 * * * source ~/.bashrc ; ec1.autocommit >> ~/.ec1/00mu/00logs/cron_ec1.sync_autocommit 2>&1
 0 1 * * * source ~/.bashrc ; e.os_upgrade >> ~/.ec1/00mu/00logs/cron_e.os_upgrade
 
 #redirecting standard output to /dev/null allow to send email only for errors

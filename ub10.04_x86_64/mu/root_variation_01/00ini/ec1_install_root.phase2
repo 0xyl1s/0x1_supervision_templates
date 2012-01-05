@@ -72,6 +72,8 @@ ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/de
 ufw disable
 shorewall start
 
+e.crone
+
 date > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1
 
 # ____________________________________________________________________
