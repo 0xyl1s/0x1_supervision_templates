@@ -9,8 +9,7 @@ then
     exit 1
 fi
 
-ec1_user_home=${EC1__USER_HOMEEC1__USER_ec1_user_home}
-
+ec1_user_home=${EC1__USER_HOME}
 
 ec1_user_inidir="${ec1_user_home}/.ec1.ini"
 ec1_user_basedir="${ec1_user_home}/.ec1"
