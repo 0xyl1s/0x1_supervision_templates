@@ -7,7 +7,7 @@ ufw --force enable
 
 ec1_user_inidir="$HOME/.ec1.ini"
 
-date > $ec1_user_inidir/logs/ec1.ini.system_ini.0
+date > $ec1_user_inidir/logs/ec1.ini.system.0
 
 ec1_system_basedir='/.ec1'
 
@@ -68,7 +68,7 @@ mkdir /00transfert
 chgrp ec1_local /00transfert
 chmod 770 /00transfert
 
-date > $ec1_user_inidir/logs/ec1.ini.system_ini.1
+date > $ec1_user_inidir/logs/ec1.ini.system.1
 
 reboot
 sleep 10

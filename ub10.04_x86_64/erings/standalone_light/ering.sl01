@@ -32,9 +32,9 @@ chmod 755 /etc/rc.local
 
 aptitude install curl git-core -y
 
-if [[ ! -f $ec1_user_inidir/logs/ec1.ini.system_ini.1 ]]
+if [[ ! -f $ec1_user_inidir/logs/ec1.ini.system.1 ]]
 then
-    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system | bash > $ec1_user_inidir/logs/ec1.ini.system_ini.log 2>$ec1_user_inidir/logs/ec1.ini.system_ini.error
+    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system | bash > $ec1_user_inidir/logs/ec1.ini.system.log 2>$ec1_user_inidir/logs/ec1.ini.system.error
 fi
 
 if [[ ! -f $ec1_user_inidir/logs/ec1.ini.root_phase1.1 ]]
