@@ -55,13 +55,13 @@ sleep 20
 
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]] && [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; EC1__USER_HOME="${ec1_user_home}" ; bash ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase1.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; EC1__USER_HOME="${ec1_user_home}" ; ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase1.error
 fi
 
 sleep 20
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]] && [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1 ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; EC1__USER_HOME="${ec1_user_home}" ; bash ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase2.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; EC1__USER_HOME="${ec1_user_home}" ; ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase2.error
 fi
 
 sleep 20
