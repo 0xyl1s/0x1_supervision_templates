@@ -67,11 +67,9 @@ then
     cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase2.error
 fi
 
-sleep 20
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1 ]]
 then
-    mv /etc/rc.local ${ec1_user_inidir}/rc.local__ec1
-    cp ${ec1_user_inidir}/rc.local_00ori /etc/rc.local
+    mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
     mv ${ec1_user_inidir} ${HOME}/.ec1/.ini
 fi
 
