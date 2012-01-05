@@ -20,6 +20,22 @@ then
 fi
 
 
+ec1_data_files=(
+	${ec1_user_inidir}/00data/hostname.ini
+	${ec1_user_inidir}/00data/authorized_keys.ini
+	${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini
+	)
+
+for ec1_data_file in ${ec1_data_files[@]}
+do
+    if [[ ! -f ${ec1_data_file} ]]
+    then
+	echo "ERROR: can't access ec1_data_file: ${ec1_data_file}"
+	exit 1
+    fi
+done
+
+
 #adding script to rc.local
 mv /etc/rc.local ${ec1_user_inidir}/rc.local_00ori
 

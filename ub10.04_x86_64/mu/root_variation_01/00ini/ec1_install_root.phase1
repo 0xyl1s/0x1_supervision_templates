@@ -3,14 +3,13 @@
 
 umask 077
 
-if [[ -z ${EC1__USER_ec1_user_home} ]] || [[ -z ${EC1__USER_INIDIR} ]]
+if [[ -z ${EC1__USER_HOME} ]]
 then
-    echo "ERROR: EC1__USER_HOME (${EC1__USER_HOME}) and EC1__USER_INIDIR (${EC1__USER_INIDIR}) variables must be provided"
+    echo "ERROR: EC1__USERc1_user_home (${EC1__USER_HOME}) variable must be provided"
     exit 1
 fi
 
-ec1_user_home=${EC1__USER_ec1_user_home}
-ec1_user_inidir="${EC1__USER_INIDIR}"
+ec1_user_home=${EC1__USER_HOMEEC1__USER_ec1_user_home}
 
 
 ec1_user_inidir="${ec1_user_home}/.ec1.ini"
@@ -68,7 +67,12 @@ ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${ec1_user_home}/
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${ec1_user_home}/.ssh/
 ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${ec1_user_home}/.ssh/
 ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${ec1_user_home}/.ssh/
-cat "${ec1_user_inidir}/authorized_keys.ini" > ${ec1_user_home}/.ssh/authorized_keys
+if [[ ! -f ${ec1_user_inidir}/00data/authorized_keys.ini ]]
+then
+    echo "ERROR: can't access authorized_keys.ini: ${ec1_user_inidir}/00data/authorized_keys.ini"
+    exit 1
+fi
+cat "${ec1_user_inidir}/00data/authorized_keys.ini" > ${ec1_user_home}/.ssh/authorized_keys
 
 #bash
 mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
