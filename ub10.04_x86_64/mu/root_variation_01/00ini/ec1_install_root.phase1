@@ -89,6 +89,7 @@ date > $ec1_user_inidir/logs/ec1.ini.root_phase1.1
 
 #TODO: just exit instead of reboot
 reboot
+sleep 10
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ

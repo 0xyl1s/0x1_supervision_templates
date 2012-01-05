@@ -71,6 +71,7 @@ chmod 770 /00transfert
 date > $ec1_user_inidir/logs/ec1.ini.system_ini.1
 
 reboot
+sleep 10
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
