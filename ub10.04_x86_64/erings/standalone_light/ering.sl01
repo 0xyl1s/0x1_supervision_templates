@@ -6,6 +6,29 @@ umask 077
 ec1_user_inidir="/root/.ec1.ini"
 
 #adding script to rc.local
+mv /etc/rc.local $ec1_user_inidir/rc.local_00ori
+
+cat <<EC1HEREDOC > /etc/rc.local
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+bash /root/.ec1.ini/ering.sl01
+
+echo 3600 > /sys/block/`basename /dev/sda`/device/timeout
+
+exit 0
+EC1HEREDOC
+chmod 755 /etc/rc.local
 
 aptitude install curl git-core -y
 
@@ -26,7 +49,13 @@ then
     curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 | bash > $ec1_user_inidir/logs/ec1.ini.root_phase2.log 2>$ec1_user_inidir/logs/ec1.ini.root_phase2.error
 fi
 
-#removing script from rc.local
+if [[ -f $ec1_user_inidir/logs/ec1.ini.root_phase2.1 ]]
+then
+    mv /etc/rc.local $ec1_user_inidir/rc.local__ec1
+    mv $ec1_user_inidir/rc.local_00ori /etc/rc.local
+    mv $ec1_user_inidir $HOME/.ec1/.ini
+fi
+
 
 
 # ____________________________________________________________________
