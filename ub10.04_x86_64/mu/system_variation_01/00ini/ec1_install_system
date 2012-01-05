@@ -12,7 +12,6 @@ then
 fi
 
 ec1_user_home=${EC1__USER_HOME}
-ec1_user_basedir="${ec1_user_home}/.ec1"
 ec1_user_inidir="${ec1_user_home}/.ec1.ini"
 
 
@@ -84,8 +83,6 @@ chgrp -R ec1_local ${ec1_system_basedir}
 mkdir /00transfert
 chgrp ec1_local /00transfert
 chmod 770 /00transfert
-
-(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mkdir ${ec1_user_basedir}/.to_cluster ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
 
 date > ${ec1_user_inidir}/logs/ec1.ini.system.1
 

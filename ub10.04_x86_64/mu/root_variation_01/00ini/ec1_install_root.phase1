@@ -97,7 +97,7 @@ ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
 chmod -R go= ${ec1_user_basedir}
 
-echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_user_mu_basedir}/openssh/00certificates/"
+cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mkdir ${ec1_user_basedir}/.to_cluster ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 

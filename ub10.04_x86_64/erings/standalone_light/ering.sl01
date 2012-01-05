@@ -23,6 +23,7 @@ ec1_data_files=(
 	${ec1_user_inidir}/00data/hostname.ini
 	${ec1_user_inidir}/00data/authorized_keys.ini
 	${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini
+	${ec1_user_inidir}/00data/user_email.ini
 	)
 
 for ec1_data_file in ${ec1_data_files[@]}
