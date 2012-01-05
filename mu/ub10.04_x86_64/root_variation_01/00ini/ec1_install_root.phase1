@@ -37,7 +37,6 @@ done
 
 rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/mu/ub10.04_x86_64/root_variation_01/ $ec1_user_mu_basedir/
 rm -R $ec1_user_basedir/ec1_supervision_templates
-chmod -R go= $ec1_user_basedir
 
 mkdir $HOME/.ssh
 chmod 700 $HOME/.ssh
@@ -50,7 +49,9 @@ ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
 echo -n "SSH access public key ? "
 read ssh_access_public_key
-echo -n "$ssh_access_public_key" > $HOME/.ssh/authorized_keys
+echo -n "$ssh_access_public_key" > $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys
+chmod -R go= $ec1_user_basedir
+
 #bash
 mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
 ln -s $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile $HOME/
