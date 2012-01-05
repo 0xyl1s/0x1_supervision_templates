@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
-# https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/standalone_light/ering.sl_01
-
+# https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/standalone_light/ering.sl01
 
 umask 077
-
-ec1_user_inidir='/.ec1.ini'
-
-cd $ec1_user_inidir
 
 aptitude install curl git-core -y
 
