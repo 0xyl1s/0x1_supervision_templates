@@ -13,8 +13,8 @@ ec1_system_basedir='/.ec1'
 
 if [[ ! -d ${ec1_system_basedir} ]]
 then
-    mkdir $ec1_system_basedir
-    chmod g+s $ec1_system_basedir
+    mkdir ${ec1_system_basedir}
+    chmod g+s ${ec1_system_basedir}
     echo "created dir ${ec1_system_basedir}"
 else
     echo "ERROR: directory ${ec1_system_basedir} exists already"
@@ -34,7 +34,7 @@ do
     git clone git://github.com/epiculture/${repository}.git
 done
 
-rsync -avh --no-o --no-g --stats ${ec1_system_basedir/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ ${ec1_system_basedir}/00mu/
+rsync -avh --no-o --no-g --stats ${ec1_system_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ ${ec1_system_basedir}/00mu/
 
 rm -R ${ec1_system_basedir}/ec1_supervision_templates
 
