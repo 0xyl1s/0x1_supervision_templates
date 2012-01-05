@@ -3,13 +3,13 @@
 
 umask 077
 
-ec1_user_inidir="$HOME/.ec1.ini"
-ec1_user_basedir="$HOME/.ec1"
-ec1_user_mu_basedir="$HOME/.ec1/00mu"
+ec1_user_inidir="${HOME}/.ec1.ini"
+ec1_user_basedir="${HOME}/.ec1"
+ec1_user_mu_basedir="${HOME}/.ec1/00mu"
 
-if [[ ! -f $ec1_user_inidir/logs/ec1.ini.root_phase1.1 ]]
+if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase2 until ec1.ini.root_phase1.1 DEBUG: $ec1_user_inidir/logs/ec1.ini.root_phase1.1"
+    echo "ERROR: can't get to ec1.ini.root_phase2 until ec1.ini.root_phase1.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1"
     exit 1
 fi
 
