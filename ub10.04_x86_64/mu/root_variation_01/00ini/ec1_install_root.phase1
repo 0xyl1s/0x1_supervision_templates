@@ -3,9 +3,17 @@
 
 umask 077
 
-ec1_user_inidir='/.ec1.ini'
+ec1_user_inidir='$HOME/.ec1.ini'
 ec1_user_basedir="$HOME/.ec1"
 ec1_user_mu_basedir="$HOME/.ec1/00mu"
+
+if [[ ! -f $ec1_user_inidir/logs/ec1.ini.root_phase1.1 ]]
+then
+    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1"
+    exit 1
+fi
+
+date > $ec1_user_inidir/logs/ec1.ini.root_phase1.0
 
 if [[ -d $ec1_user_basedir ]]
 then
@@ -73,14 +81,13 @@ ln -s $ec1_user_mu_basedir/.recycle $HOME/
 
 chmod -R go= $ec1_user_basedir
 
-touch $ec1_user_mu_basedir/.ec1_pre-stage2
-
 echo "root ec1 base installation finished: please copy ssh certificates to $ec1_user_mu_basedir/openssh/00certificates/"
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
-touch $ec1_user_inidir/.root_phase1.done
+date > $ec1_user_inidir/logs/ec1.ini.root_phase1.1
 
+reboot
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
