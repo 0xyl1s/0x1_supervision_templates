@@ -44,13 +44,14 @@ echo "created dir $HOME/.ssh"
 
 #openssh
 ln -s $ec1_user_mu_basedir/openssh/00livelinks/config/config $HOME/.ssh/
-ln -s $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys $HOME/.ssh/
+#ln -s $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
 ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
 echo -n "SSH access public key ? "
 read ssh_access_public_key
-echo -n "$ssh_access_public_key" > $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys
-chmod -R go= $ec1_user_basedir
+#echo -n "$ssh_access_public_key" > $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys
+echo -n "$ssh_access_public_key" > $HOME/.ssh/authorized_keys
+chmod 600 $HOME/.ssh/authorized_keys
 
 #bash
 mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
@@ -72,6 +73,8 @@ ln -s $ec1_user_mu_basedir/vim/00livelinks/.vim/.vim $HOME/
 ln -s $ec1_user_mu_basedir/vim/00livelinks/.vimrc/.vimrc $HOME/
 
 ln -s $ec1_user_mu_basedir/.recycle $HOME/
+
+chmod -R go= $ec1_user_basedir
 
 touch $ec1_user_mu_basedir/.ec1_pre-stage2
 
