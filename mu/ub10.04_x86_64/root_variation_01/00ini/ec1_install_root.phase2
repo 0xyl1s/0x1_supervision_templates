@@ -50,6 +50,7 @@ ufw disable
 shorewall start
 
 rm $ec1_user_mu_basedir/.ec1_pre-stage2
+rm -R  $HOME/.ec1_erase
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
