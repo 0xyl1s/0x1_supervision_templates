@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# cd $HOME/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash $HOME/.ec1_erase/ec1_install_root.phase2
+# cd ${HOME}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${HOME}/.ec1_erase/ec1_install_root.phase2
 
 umask 077
 
@@ -13,10 +13,10 @@ then
     exit 1
 fi
 
-date > $ec1_user_inidir/logs/ec1.ini.root_phase2.0
+date > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.0
 
 check_rvm=$(type rvm|head -1)
-if [[ $check_rvm == 'rvm is a function' ]]
+if [[ ${check_rvm} == 'rvm is a function' ]]
 then
     echo "rvm is a function indeed ..."
 else
@@ -27,38 +27,38 @@ fi
 #cf rvm requirements
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
 #TODO: only source ~/.bashrc
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && . "${HOME}/.rvm/scripts/rvm" # Load RVM function
+[[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
 #rvm install 1.8.7
 #rvm use 1.8.7 --default
 rvm install 1.9.3
 rvm use 1.9.3 --default
 
-if [ -z "$RUBY_VERSION" ]
+if [ -z "${RUBY_VERSION}" ]
 then
     echo "no ruby ..."
     exit 1
 fi
 
-ec1_machine_ssh_port=$(cat $ec1_user_inidir/ec1_machine_ssh_port.ini)
+ec1_machine_ssh_port=$(cat ${ec1_user_inidir}/ec1_machine_ssh_port.ini)
 
 #openssh
-ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"$ec1_machine_ssh_port\")" $ec1_user_mu_basedir/openssh/00livelinks/etc_sshd_config/sshd_config;
-mv /etc/ssh/sshd_config $ec1_user_mu_basedir/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
-ln -s $ec1_user_mu_basedir/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
+ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config;
+mv /etc/ssh/sshd_config ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
+ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
 service ssh restart
 
 #shorewall
-ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"$ec1_machine_ssh_port\")" $ec1_user_mu_basedir/shorewall/00livelinks/00configs/01/ec1/rules;
-ln -s $ec1_user_mu_basedir/shorewall/00livelinks/00configs/01/ec1 /etc/shorewall/
-mv /etc/shorewall/shorewall.conf $ec1_user_mu_basedir/shorewall/00livelinks/shorewall.conf/shorewall.conf_00ori
-ln -s $ec1_user_mu_basedir/shorewall/00livelinks/shorewall.conf/shorewall.conf /etc/shorewall/
-mv /etc/default/shorewall $ec1_user_mu_basedir/shorewall/00livelinks/etc_default/shorewall_00ori
-ln -s $ec1_user_mu_basedir/shorewall/00livelinks/etc_default/shorewall /etc/default/
+ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1/rules;
+ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1 /etc/shorewall/
+mv /etc/shorewall/shorewall.conf ${ec1_user_mu_basedir}/shorewall/00livelinks/shorewall.conf/shorewall.conf_00ori
+ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/shorewall.conf/shorewall.conf /etc/shorewall/
+mv /etc/default/shorewall ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall_00ori
+ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
 ufw disable
 shorewall start
 
-date > $ec1_user_inidir/logs/ec1.ini.root_phase2.1
+date > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1
 
 # ____________________________________________________________________
 # ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ

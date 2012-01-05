@@ -5,23 +5,23 @@ umask 027
 ufw allow 22/tcp
 ufw --force enable
 
-ec1_user_inidir="$HOME/.ec1.ini"
+ec1_user_inidir="${HOME}/.ec1.ini"
 
-date > $ec1_user_inidir/logs/ec1.ini.system.0
+date > ${ec1_user_inidir}/logs/ec1.ini.system.0
 
 ec1_system_basedir='/.ec1'
 
-if [[ ! -d $ec1_system_basedir ]]
+if [[ ! -d ${ec1_system_basedir} ]]
 then
     mkdir $ec1_system_basedir
     chmod g+s $ec1_system_basedir
-    echo "created dir $ec1_system_basedir"
+    echo "created dir ${ec1_system_basedir}"
 else
-    echo "ERROR: directory $ec1_system_basedir exists already"
+    echo "ERROR: directory ${ec1_system_basedir} exists already"
     exit 1
 fi
 
-cd $ec1_system_basedir
+cd ${ec1_system_basedir}
 
 repositories=(
 	ec1_system_livelinks
@@ -34,9 +34,9 @@ do
     git clone git://github.com/epiculture/${repository}.git
 done
 
-rsync -avh --no-o --no-g --stats $ec1_system_basedir/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ $ec1_system_basedir/00mu/
+rsync -avh --no-o --no-g --stats ${ec1_system_basedir/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ ${ec1_system_basedir}/00mu/
 
-rm -R $ec1_system_basedir/ec1_supervision_templates
+rm -R ${ec1_system_basedir}/ec1_supervision_templates
 
 cp /etc/network/interfaces /.ec1/00mu/network/00livelinks/interfaces/interfaces_00ori
 mv /etc/network/interfaces /.ec1/00mu/network/00livelinks/interfaces/
@@ -63,12 +63,12 @@ aptitude install ntp sshfs shorewall mc tar gzip lzma rar unrar bzip2 arj lha rp
 aptitude clean
 
 groupadd ec1_local
-chgrp -R ec1_local $ec1_system_basedir
+chgrp -R ec1_local ${ec1_system_basedir}
 mkdir /00transfert
 chgrp ec1_local /00transfert
 chmod 770 /00transfert
 
-date > $ec1_user_inidir/logs/ec1.ini.system.1
+date > ${ec1_user_inidir}/logs/ec1.ini.system.1
 
 reboot
 sleep 10

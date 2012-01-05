@@ -3,31 +3,31 @@
 
 umask 077
 
-ec1_user_inidir="$HOME/.ec1.ini"
-ec1_user_basedir="$HOME/.ec1"
-ec1_user_mu_basedir="$HOME/.ec1/00mu"
+ec1_user_inidir="${HOME}/.ec1.ini"
+ec1_user_basedir="${HOME}/.ec1"
+ec1_user_mu_basedir="${HOME}/.ec1/00mu"
 
-if [[ ! -f $ec1_user_inidir/logs/ec1.ini.system.1 ]]
+if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: $ec1_user_inidir/logs/ec1.ini.system_ini.1"
+    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.system_ini.1"
     exit 1
 fi
 
-date > $ec1_user_inidir/logs/ec1.ini.root_phase1.0
+date > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.0
 
-if [[ -d $ec1_user_basedir ]]
+if [[ -d ${ec1_user_basedir} ]]
 then
-    echo "ERROR: directory $ec1_user_basedir exists already"
+    echo "ERROR: directory ${ec1_user_basedir} exists already"
     exit 1
 fi
-if [[ -d $HOME/.ssh ]]
+if [[ -d ${HOME}/.ssh ]]
 then
-    mv $HOME/.ssh $HOME/.ssh__pre-ec1
+    mv ${HOME}/.ssh ${HOME}/.ssh__pre-ec1
 fi
 
-mkdir -p $ec1_user_mu_basedir
-echo "created dir $ec1_user_mu_basedir"
-cd $ec1_user_basedir
+mkdir -p ${ec1_user_mu_basedir}
+echo "created dir ${ec1_user_mu_basedir}"
+cd ${ec1_user_basedir}
 
 repositories=(
 	ec1_lib
@@ -45,49 +45,49 @@ do
 done
 
 #DEBUG: removing the sleeps
-rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ $ec1_user_mu_basedir/
+rsync -avh --no-o --no-g --stats ${ec1_user_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${ec1_user_mu_basedir}/
 
-rm -R $ec1_user_basedir/ec1_supervision_templates
+rm -R ${ec1_user_basedir}/ec1_supervision_templates
 
-mkdir $HOME/.ssh
-chmod 700 $HOME/.ssh
-echo "created dir $HOME/.ssh"
+mkdir ${HOME}/.ssh
+chmod 700 ${HOME}/.ssh
+echo "created dir ${HOME}/.ssh"
 
 #openssh
-ln -s $ec1_user_mu_basedir/openssh/00livelinks/config/config $HOME/.ssh/
-ln -s $ec1_user_mu_basedir/openssh/00livelinks/authorized_keys/authorized_keys $HOME/.ssh/
-ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa $HOME/.ssh/
-ln -s $ec1_user_mu_basedir/openssh/00certificates/id_rsa.pub $HOME/.ssh/
-cat "$ec1_user_inidir/authorized_keys.ini" > $HOME/.ssh/authorized_keys
+ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${HOME}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${HOME}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${HOME}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${HOME}/.ssh/
+cat "${ec1_user_inidir}/authorized_keys.ini" > ${HOME}/.ssh/authorized_keys
 
 #bash
-mv $HOME/.profile $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile_00ori
-ln -s $ec1_user_mu_basedir/bash/00livelinks/.profile/.profile $HOME/
-mv $HOME/.bashrc $ec1_user_mu_basedir/bash/00livelinks/.bashrc/.bashrc_00ori
-ln -s $ec1_user_mu_basedir/bash/00livelinks/.bashrc/.bashrc $HOME/
+mv ${HOME}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
+ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile ${HOME}/
+mv ${HOME}/.bashrc ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
+ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${HOME}/
 #mc
-mkdir $HOME/.mc
-ln -s $ec1_user_mu_basedir/mc/00livelinks/ini/ini $HOME/.mc/
-ln -s $ec1_user_mu_basedir/mc/00livelinks/bindings/bindings $HOME/.mc/
+mkdir ${HOME}/.mc
+ln -s ${ec1_user_mu_basedir}/mc/00livelinks/ini/ini ${HOME}/.mc/
+ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${HOME}/.mc/
 #screen
-ln -s $ec1_user_mu_basedir/screen/00livelinks/.screenrc/.screenrc $HOME/
+ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${HOME}/
 #rvm
-ln -s $ec1_user_mu_basedir/rvm/00livelinks/.rvmrc/.rvmrc ~/
+ln -s ${ec1_user_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
 #git
-ln -s $ec1_user_mu_basedir/git/00livelinks/.gitconfig/.gitconfig $HOME/
+ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${HOME}/
 #vim
-ln -s $ec1_user_mu_basedir/vim/00livelinks/.vim/.vim $HOME/
-ln -s $ec1_user_mu_basedir/vim/00livelinks/.vimrc/.vimrc $HOME/
+ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${HOME}/
+ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${HOME}/
 
-ln -s $ec1_user_mu_basedir/.recycle $HOME/
+ln -s ${ec1_user_mu_basedir}/.recycle ${HOME}/
 
-chmod -R go= $ec1_user_basedir
+chmod -R go= ${ec1_user_basedir}
 
-echo "root ec1 base installation finished: please copy ssh certificates to $ec1_user_mu_basedir/openssh/00certificates/"
+echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_user_mu_basedir}/openssh/00certificates/"
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
-date > $ec1_user_inidir/logs/ec1.ini.root_phase1.1
+date > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1
 
 #TODO: just exit instead of reboot
 reboot
