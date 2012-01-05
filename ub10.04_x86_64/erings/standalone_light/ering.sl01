@@ -4,7 +4,7 @@
 umask 077
 
 ec1_user_inidir="$(dirname ${0})"
-ec1_user_home_file="${ec1_user_inidir}/ec1_user_home"
+ec1_user_home_file="${ec1_user_inidir}/00data/ec1_user_home"
 
 if [[ ! -f ${ec1_user_home_file} ]]
 then
