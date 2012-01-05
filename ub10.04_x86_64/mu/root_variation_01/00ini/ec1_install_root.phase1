@@ -5,9 +5,10 @@ umask 077
 
 if [[ -z ${EC1__USER_HOME} ]]
 then
-    echo "ERROR: EC1__USERc1_user_home (${EC1__USER_HOME}) variable must be provided"
+    echo "ERROR: EC1__USER_HOME (${EC1__USER_HOME}) variable must be provided"
     exit 1
 fi
+
 
 ec1_user_home=${EC1__USER_HOME}
 
