@@ -37,7 +37,7 @@ done
 
 rsync -avh --no-o --no-g --stats $ec1_user_basedir/ec1_supervision_templates/mu/ub10.04_x86_64/root_variation_01/ $ec1_user_mu_basedir/
 rm -R $ec1_user_basedir/ec1_supervision_templates
-chmod 600 $ec1_user_mu_basedir
+chmod -R go= $ec1_user_basedir
 
 mkdir $HOME/.ssh
 chmod 700 $HOME/.ssh
