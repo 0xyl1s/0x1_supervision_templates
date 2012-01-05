@@ -3,6 +3,7 @@
 
 umask 077
 
+ec1_user_inidir='/.ec1.ini'
 ec1_user_basedir="$HOME/.ec1"
 ec1_user_mu_basedir="$HOME/.ec1/00mu"
 
