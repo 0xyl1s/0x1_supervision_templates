@@ -5,7 +5,7 @@ source ~/.bashrc
 
 e.openssh_authorized_keys_add
 
-umask 007
+umask 077
 
 ec1_user_basedir="$HOME/.ec1"
 ec1_user_mu_basedir="$HOME/.ec1/00mu"
