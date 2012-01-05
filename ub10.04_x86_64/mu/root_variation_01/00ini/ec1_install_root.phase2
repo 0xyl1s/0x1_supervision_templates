@@ -7,6 +7,7 @@ e.openssh_authorized_keys_add
 
 umask 077
 
+ec1_user_inidir='/.ec1.ini'
 ec1_user_basedir="$HOME/.ec1"
 ec1_user_mu_basedir="$HOME/.ec1/00mu"
 
@@ -29,8 +30,14 @@ fi
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
 rvm install 1.8.7
 rvm use 1.8.7 --default
+if $(rvm use 1.8.7 --default)
+    echo "rvm 1.8.7 installed as default" >> $ec1_user_inidir/rvm_install.log
+fi
 rvm install 1.9.3
 rvm use 1.9.3 --default
+if $(rvm use 1.9.3 --default)
+    echo "rvm 1.9.3 installed as default" >> $ec1_user_inidir/rvm_install.log
+fi
 
 echo -n "ec1_machine_ssh_port ? "
 read ec1_machine_ssh_port

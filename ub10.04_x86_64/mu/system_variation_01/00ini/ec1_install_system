@@ -5,6 +5,8 @@ umask 027
 ufw allow 22/tcp
 ufw --force enable
 
+ec1_user_inidir='/.ec1.ini'
+
 ec1_system_basedir='/.ec1'
 
 if [[ ! -d $ec1_system_basedir ]]
@@ -63,6 +65,8 @@ chgrp -R ec1_local $ec1_system_basedir
 mkdir /00transfert
 chgrp ec1_local /00transfert
 chmod 770 /00transfert
+
+touch $ec1_user_inidir/.system_ini.done
 
 reboot
 
