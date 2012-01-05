@@ -3,13 +3,23 @@
 
 umask 077
 
-ec1_user_inidir="${HOME}/.ec1.ini"
-ec1_user_basedir="${HOME}/.ec1"
-ec1_user_mu_basedir="${HOME}/.ec1/00mu"
+if [[ -z ${EC1__USER_ec1_user_home} ]] || [[ -z ${EC1__USER_INIDIR} ]]
+then
+    echo "ERROR: EC1__USER_HOME (${EC1__USER_HOME}) and EC1__USER_INIDIR (${EC1__USER_INIDIR}) variables must be provided"
+    exit 1
+fi
+
+ec1_user_home=${EC1__USER_ec1_user_home}
+ec1_user_inidir="${EC1__USER_INIDIR}"
+
+
+ec1_user_inidir="${ec1_user_home}/.ec1.ini"
+ec1_user_basedir="${ec1_user_home}/.ec1"
+ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
 
 if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.system.1 home = ${HOME}"
+    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_inidir}/logs/ec1.ini.system.1 home = ${ec1_user_home}"
     exit 1
 fi
 
@@ -20,9 +30,9 @@ then
     echo "ERROR: directory ${ec1_user_basedir} exists already"
     exit 1
 fi
-if [[ -d ${HOME}/.ssh ]]
+if [[ -d ${ec1_user_home}/.ssh ]]
 then
-    mv ${HOME}/.ssh ${HOME}/.ssh__pre-ec1
+    mv ${ec1_user_home}/.ssh ${ec1_user_home}/.ssh__pre-ec1
 fi
 
 mkdir -p ${ec1_user_mu_basedir}
@@ -49,37 +59,37 @@ rsync -avh --no-o --no-g --stats ${ec1_user_basedir}/ec1_supervision_templates/u
 
 rm -R ${ec1_user_basedir}/ec1_supervision_templates
 
-mkdir ${HOME}/.ssh
-chmod 700 ${HOME}/.ssh
-echo "created dir ${HOME}/.ssh"
+mkdir ${ec1_user_home}/.ssh
+chmod 700 ${ec1_user_home}/.ssh
+echo "created dir ${ec1_user_home}/.ssh"
 
 #openssh
-ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${HOME}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${HOME}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${HOME}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${HOME}/.ssh/
-cat "${ec1_user_inidir}/authorized_keys.ini" > ${HOME}/.ssh/authorized_keys
+ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${ec1_user_home}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${ec1_user_home}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${ec1_user_home}/.ssh/
+ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${ec1_user_home}/.ssh/
+cat "${ec1_user_inidir}/authorized_keys.ini" > ${ec1_user_home}/.ssh/authorized_keys
 
 #bash
-mv ${HOME}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
-ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile ${HOME}/
-mv ${HOME}/.bashrc ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
-ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${HOME}/
+mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
+ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile ${ec1_user_home}/
+mv ${ec1_user_home}/.bashrc ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
+ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${ec1_user_home}/
 #mc
-mkdir ${HOME}/.mc
-ln -s ${ec1_user_mu_basedir}/mc/00livelinks/ini/ini ${HOME}/.mc/
-ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${HOME}/.mc/
+mkdir ${ec1_user_home}/.mc
+ln -s ${ec1_user_mu_basedir}/mc/00livelinks/ini/ini ${ec1_user_home}/.mc/
+ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${ec1_user_home}/.mc/
 #screen
-ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${HOME}/
+ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${ec1_user_home}/
 #rvm
 ln -s ${ec1_user_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
 #git
-ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${HOME}/
+ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_user_home}/
 #vim
-ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${HOME}/
-ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${HOME}/
+ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${ec1_user_home}/
+ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_user_home}/
 
-ln -s ${ec1_user_mu_basedir}/.recycle ${HOME}/
+ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
 chmod -R go= ${ec1_user_basedir}
 

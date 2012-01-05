@@ -5,7 +5,15 @@ umask 027
 ufw allow 22/tcp
 ufw --force enable
 
-ec1_user_inidir="${HOME}/.ec1.ini"
+if [[ -z ${EC1__USER_HOME} ]]
+then
+    echo "ERROR: EC1__USER_HOME (${EC1__USER_HOME}) variable must be provided"
+    exit 1
+fi
+
+ec1_user_home=${EC1__USER_HOME}
+ec1_user_inidir="${ec1_user_home}/.ec1.ini"
+
 
 date > ${ec1_user_inidir}/logs/ec1.ini.system.0
 

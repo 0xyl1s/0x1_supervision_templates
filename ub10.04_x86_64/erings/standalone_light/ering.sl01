@@ -3,7 +3,22 @@
 
 umask 077
 
-ec1_user_inidir="/root/.ec1.ini"
+ec1_user_inidir="$(dirname ${0})"
+ec1_user_home_file="${ec1_user_inidir}/ec1_user_home"
+
+if [[ ! -f ${ec1_user_home_file} ]]
+then
+    echo ${HOME} > ${ec1_user_home_file}
+fi
+
+ec1_user_home=$(cat ${ec1_user_home_file})
+
+if [[ ! -f ${ec1_user_home_file} ]] || [[ -z ${ec1_user_home} ]]
+then
+    echo "ERROR: can't get content ec1_user_home (${ec1_user_home}) from ec1_user_home_file ${ec1_user_home_file} file"
+    exit 1
+fi
+
 
 #adding script to rc.local
 mv /etc/rc.local ${ec1_user_inidir}/rc.local_00ori
@@ -34,19 +49,19 @@ aptitude install curl git-core -y
 
 if [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]]
 then
-    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system | bash > ${ec1_user_inidir}/logs/ec1.ini.system.log 2>${ec1_user_inidir}/logs/ec1.ini.system.error
+    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system | EC1__USER_HOME="${ec1_user_home}" ; EC1__USER_INIDIR="${ec1_user_inidir}" ; bash > ${ec1_user_inidir}/logs/ec1.ini.system.log 2>${ec1_user_inidir}/logs/ec1.ini.system.error
 fi
 sleep 20
 
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.system.1 ]] && [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]]
 then
-    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 | bash > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase1.error
+    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 | EC1__USER_HOME="${ec1_user_home}" ; bash > ${ec1_user_inidir}/logs/ec1.ini.root_phase1.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase1.error
 fi
 
 sleep 20
 if [[ -f ${ec1_user_inidir}/logs/ec1.ini.root_phase1.1 ]] && [[ ! -f ${ec1_user_inidir}/logs/ec1.ini.root_phase2.1 ]]
 then
-    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 | bash > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase2.error
+    curl -s https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 | EC1__USER_HOME="${ec1_user_home}" ; bash > ${ec1_user_inidir}/logs/ec1.ini.root_phase2.log 2>${ec1_user_inidir}/logs/ec1.ini.root_phase2.error
 fi
 
 sleep 20
