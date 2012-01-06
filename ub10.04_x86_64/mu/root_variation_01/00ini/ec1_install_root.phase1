@@ -1,33 +1,54 @@
 #!/usr/bin/env bash
 # https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1
 
+# ____________________________________________________________________
+# >>>>>  ec1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+
+function e__datetime_sec(){
+date +%Y-%m-%d_%H%M%S
+}
+
+# ――――――――――――――――――――――――――――――――――――――#}}}
+
+# >>> variables#{{{
+ec1_system_basedir="/.ec1"
+ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
+ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
+ec1_user_inidir="${HOME}/.ec1.ini"
+ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
+ec1_user_basedir="${HOME}/.ec1"
+ec1_user_mu_basedir="${HOME}/.ec1/00mu"
+ec1_user_mu_data_dir="${ec1_user_mu_basedir}/00data"
+
+ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.root_phase1"
+#}}}
+
+# >>> log ini#{{{
+if [[ -f ${ec1_script_log}.done ]]
+then
+    echo "script already runned: ${ec1_script_log}.done"
+    exit
+fi
+if [[ -f ${ec1_script_log} ]]
+then
+    echo "ERROR: interrupted script (${0}) execution, see log: ${ec1_script_log}" 2>&1
+    exit 1
+fi
+echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+#}}}
+
 umask 077
 
-if [[ -z ${EC1__USER_HOME} ]]
-then
-    echo "ERROR: EC1__USER_HOME (${EC1__USER_HOME}) variable must be provided"
-    exit 1
-fi
+groupadd ec1_local
+chgrp -R ec1_local ${ec1_system_basedir}
+mkdir /00transfert
+chgrp ec1_local /00transfert
+chmod 770 /00transfert
 
-
-ec1_user_home=${EC1__USER_HOME}
-
-ec1_user_inidir="${ec1_user_home}/.ec1.ini"
-ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_basedir="${ec1_user_home}/.ec1"
-ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
-
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.1 ]]
-then
-    echo "ERROR: can't get to ec1.ini.root_phase1 until ec1.ini.system_ini.1 DEBUG: ${ec1_user_ini_logsdir}/ec1.ini.system.1 home = ${ec1_user_home}"
-    exit 1
-fi
-
-date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.0
 
 if [[ -d ${ec1_user_basedir} ]]
 then
-    echo "ERROR: directory ${ec1_user_basedir} exists already"
+    echo "ERROR: directory ${ec1_user_basedir} exists already" 2>&1
     exit 1
 fi
 if [[ -d ${ec1_user_home}/.ssh ]]
@@ -36,6 +57,8 @@ then
 fi
 
 mkdir -p ${ec1_user_mu_basedir}
+mkdir -p ${ec1_user_mu_basedir}/ec1_softs_installed/00bin
+mkdir ${ec1_user_basedir}/.to_cluster
 echo "created dir ${ec1_user_mu_basedir}"
 cd ${ec1_user_basedir}
 
@@ -45,35 +68,54 @@ repositories=(
 	ec1_core_livelinks
 	ec1_xtra
 	ec1_xtra_livelinks
+	ec1_softs_install
 	ec1_supervision_templates
 	)
 
 for repository in ${repositories[@]}
 do
-    echo "cloning git://github.com/epiculture/${repository}.git"
     git clone git://github.com/epiculture/${repository}.git
 done
 
-#DEBUG: removing the sleeps
 rsync -avh --no-o --no-g --stats ${ec1_user_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${ec1_user_mu_basedir}/
-
 rm -R ${ec1_user_basedir}/ec1_supervision_templates
+mv ${ec1_user_inidir}/dispatch/user/00data ${ec1_user_mu_basedir}/
 
-mkdir ${ec1_user_home}/.ssh
-chmod 700 ${ec1_user_home}/.ssh
-echo "created dir ${ec1_user_home}/.ssh"
+ec1_data_user_files=(
+	${ec1_user_mu_data_dir}/authorized_keys
+	${ec1_user_mu_data_dir}/user.name
+	${ec1_user_mu_data_dir}/user.email
+	${ec1_user_mu_data_dir}/user.password
+	${ec1_user_mu_data_dir}/user.entity
+	)
+for ec1_data_user_file in ${ec1_data_user_files[@]}
+do
+    if [[ ! -f ${ec1_data_user_file} ]]
+    then
+	echo "ERROR: can't access ec1_data_user_file: ${ec1_data_user_file}" 2>&1
+	exit 1
+    fi
+done
 
 #openssh
+if [[ ! -f ${ec1_user_inidir}/dispatch/user/authorized_keys ]]
+then
+    echo "ERROR: can't access ec1_data_user_file: ${ec1_user_inidir}/dispatch/user/authorized_keys" 2>&1
+    exit 1
+fi
+mv "${ec1_user_inidir}/dispatch/user/authorized_keys" ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
+if [[ ! -f ${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate ]]
+then
+    echo "ERROR: can't access ec1_user.openssh.default_certificate: ${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate" 2>&1
+    exit 1
+fi
+mv "${ec1_user_inidir}/dispatch/user/authorized_keys" ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
+mkdir ${ec1_user_home}/.ssh
+chmod 700 ${ec1_user_home}/.ssh
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${ec1_user_home}/.ssh/
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${ec1_user_home}/.ssh/
 ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${ec1_user_home}/.ssh/
 ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${ec1_user_home}/.ssh/
-if [[ ! -f ${ec1_user_inidir}/00data/authorized_keys.ini ]]
-then
-    echo "ERROR: can't access authorized_keys.ini: ${ec1_user_inidir}/00data/authorized_keys.ini"
-    exit 1
-fi
-cat "${ec1_user_inidir}/00data/authorized_keys.ini" > ${ec1_user_home}/.ssh/authorized_keys
 
 #bash
 mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
@@ -88,8 +130,6 @@ ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${ec1_user_home}/.
 ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${ec1_user_home}/
 #rvm
 ln -s ${ec1_user_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
-#git
-ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_user_home}/
 #vim
 ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${ec1_user_home}/
 ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_user_home}/
@@ -98,20 +138,19 @@ ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
 chmod -R go= ${ec1_user_basedir}
 
-(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mkdir ${ec1_user_basedir}/.to_cluster ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
-
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
-date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1
-
-#TODO: just exit instead of reboot
-#reboot
-#sleep 10
+# >>> log end#{{{
+echo "done - $(e__datetime_sec)" > ${ec1_script_log}
+e__datetime_sec > ${ec1_script_log}.done
+#}}}
 
 # ____________________________________________________________________
-# ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
-# This file is part of the libre project Epiculture, distributed under
-# the GNU GPLv3 license ( www.epiculture.org/ec1_core/LICENSE )
-# Copyright 2005-2012 Pierre-Maël Crétinon
-# ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
 # vim: ft=sh

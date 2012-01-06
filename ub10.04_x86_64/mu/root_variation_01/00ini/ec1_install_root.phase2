@@ -1,29 +1,43 @@
 #!/usr/bin/env bash
 # cd ${ec1_user_home}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${ec1_user_home}/.ec1_erase/ec1_install_root.phase2
 
-umask 077
+# ____________________________________________________________________
+# >>>>>  ec1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
 
-if [[ -z ${EC1__USER_HOME} ]]
-then
-    echo "ERROR: EC1__USERc1_user_home (${EC1__USER_HOME}) variable must be provided"
-    exit 1
-fi
+function e__datetime_sec(){
+date +%Y-%m-%d_%H%M%S
+}
 
-ec1_user_home=${EC1__USER_HOME}
+# ――――――――――――――――――――――――――――――――――――――#}}}
 
-
-ec1_user_inidir="${ec1_user_home}/.ec1.ini"
+# >>> variables#{{{
+ec1_system_basedir="/.ec1"
+ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
+ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
+ec1_user_inidir="${HOME}/.ec1.ini"
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_basedir="${ec1_user_home}/.ec1"
-ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
+ec1_user_basedir="${HOME}/.ec1"
+ec1_user_mu_basedir="${HOME}/.ec1/00mu"
+ec1_user_mu_data_dir="${ec1_user_mu_basedir}/00data"
 
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1 ]]
+ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.root_phase2"
+#}}}
+
+# >>> log ini#{{{
+if [[ -f ${ec1_script_log}.done ]]
 then
-    echo "ERROR: can't get to ec1.ini.root_phase2 until ec1.ini.root_phase1.1 DEBUG: ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1 home = ${ec1_user_home}"
+    echo "script already runned: ${ec1_script_log}.done"
+    exit
+fi
+if [[ -f ${ec1_script_log} ]]
+then
+    echo "ERROR: interrupted script (${0}) execution, see log: ${ec1_script_log}" 2>&1
     exit 1
 fi
+echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+#}}}
 
-date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.0
+umask 077
 
 check_rvm=$(type rvm|head -1)
 if [[ ${check_rvm} == 'rvm is a function' ]]
@@ -50,12 +64,19 @@ then
     exit 1
 fi
 
-if [[ ! -f ${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini ]]
-then
-    echo "ERROR: can't access ec1_machine_ssh_port.ini file: ${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini"
-    exit 1
-fi
-ec1_machine_ssh_port=$(cat ${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini)
+ec1_machine_ssh_port=$(cat ${ec1_system_ms_data_dir}/machine.ssh_port)
+
+#git
+ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_user_home}/
+
+(cd ${ec1_user_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_user_mu first commit' ; cd ${ec1_user_basedir} ; git clone -l --bare ${ec1_user_mu_basedir} ${ec1_user_mu_basedir}.git ; mv ${ec1_user_mu_basedir}.git ${ec1_user_basedir}/.to_cluster/)
+ln -s ${ec1_user_mu_basedir} "${ec1_user_mu_basedir}/00sync/autocommit/"
+
+(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
+(cd ${ec1_system_ms_basedir} ; git init ; git add . ; git commit -am 'ec1_system_ms first commit' ; cd ${ec1_system_basedir} ; git clone -l --bare ${ec1_system_ms_basedir} ${ec1_system_ms_basedir}.git ; mv ${ec1_system_ms_basedir}.git ${ec1_system_basedir}/.to_cluster/)
+
+#cron
+e.cronu
 
 #openssh
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config;
@@ -73,12 +94,17 @@ ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/de
 ufw disable
 shorewall start
 
-date > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.1
+# >>> log end#{{{
+echo "done - $(e__datetime_sec)" > ${ec1_script_log}
+e__datetime_sec > ${ec1_script_log}.done
+#}}}
 
 # ____________________________________________________________________
-# ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
-# This file is part of the libre project Epiculture, distributed under
-# the GNU GPLv3 license ( www.epiculture.org/ec1_core/LICENSE )
-# Copyright 2005-2012 Pierre-Maël Crétinon
-# ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
 # vim: ft=sh

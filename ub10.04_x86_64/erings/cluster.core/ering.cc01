@@ -1,52 +1,35 @@
 #!/usr/bin/env bash
-# https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/standalone_light/ering.sl01
+# https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/cluster.core/ering.cc01
 
-umask 077
+# ____________________________________________________________________
+# >>>>>  ec1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
 
+function e__datetime_sec(){
+date +%Y-%m-%d_%H%M%S
+}
+
+# ――――――――――――――――――――――――――――――――――――――#}}}
+
+# >>> variables#{{{
 ec1_user_inidir="$(dirname ${0})"
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_home_file="${ec1_user_inidir}/00data/ec1_user_home"
+ec1_user_home="${HOME}"
+#}}}
 
+# >>> log ini#{{{
 if [[ ! -d ${ec1_user_ini_logsdir} ]]
 then
     echo "ERROR: can't get access logs dir (${ec1_user_ini_logsdir})"
     exit 1
 fi
+e__datetime_sec > "${ec1_user_ini_logsdir}/ec1.ini.0"
+#}}}
 
-date > "${ec1_user_ini_logsdir}/ec1.ini.0"
-
-if [[ ! -f ${ec1_user_home_file} ]]
-then
-    echo ${HOME} > ${ec1_user_home_file}
-fi
-
-ec1_user_home=$(cat ${ec1_user_home_file})
-
-if [[ ! -f ${ec1_user_home_file} ]] || [[ -z ${ec1_user_home} ]]
-then
-    echo "ERROR: can't get content ec1_user_home (${ec1_user_home}) from ec1_user_home_file ${ec1_user_home_file} file"
-    exit 1
-fi
-
-ec1_data_files=(
-	${ec1_user_inidir}/00data/hostname.ini
-	${ec1_user_inidir}/00data/authorized_keys.ini
-	${ec1_user_inidir}/00data/ec1_machine_ssh_port.ini
-	${ec1_user_inidir}/00data/user_email.ini
-	)
-
-for ec1_data_file in ${ec1_data_files[@]}
-do
-    if [[ ! -f ${ec1_data_file} ]]
-    then
-	echo "ERROR: can't access ec1_data_file: ${ec1_data_file}"
-	exit 1
-    fi
-done
+umask 077
 
 aptitude install curl git-core -y
 
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.1 ]]
+if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
 then
 #adding warning to .bash_login
 if [[ -f ${ec1_user_home}/.bash_login ]]
@@ -54,7 +37,6 @@ then
     echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already."
     exit 1
 fi
-
 cat <<EC1HEREDOC > ${ec1_user_home}/.bash_login
 
 echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.sl01\n\n\n"
@@ -64,31 +46,34 @@ chmod 600 ${ec1_user_home}/.bash_login
 cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_system > ${ec1_user_ini_logsdir}/ec1.ini.system.log 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
 fi
 
-if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.system.1 ]] && [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1 ]]
+if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
 then
     cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
 fi
 
-if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.1 ]] && [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.1 ]]
+if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.done ]]
 then
     cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
 fi
 
-if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.1 ]]
+if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done ]]
 then
-    mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
-    mv ${ec1_user_inidir} ${ec1_user_home}/.ec1/.ini_install
 fi
 
+mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
+mv ${ec1_user_inidir} ${ec1_user_home}/.ec1/.ini_install
 echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_user_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${ec1_user_inidir}/00data/user_email.ini)
 
-date > "${ec1_user_home}/.ec1/.ini_install/logs/ec1.ini.1"
+# >>> log end#{{{
+e__datetime_sec > "${ec1_user_home}/.ec1/.ini_install/logs/ec1.ini.done"
+#}}}
 
 # ____________________________________________________________________
-# ᨊ ᨉ  LICENSE ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ ᨊ ᨉ
-# This file is part of the libre project Epiculture, distributed under
-# the GNU GPLv3 license ( www.epiculture.org/ec1_core/LICENSE )
-# Copyright 2005-2012 Pierre-Maël Crétinon
-# ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
 # vim: ft=sh
-
