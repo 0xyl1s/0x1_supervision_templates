@@ -27,12 +27,15 @@ then
     echo "script already runned: ${ec1_script_log}.done"
     exit
 fi
-if [[ -f ${ec1_script_log} ]]
+if [[ -f ${ec1_script_log} ]] && [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
 then
     echo "ERROR: interrupted script (${0}) execution, see log: ${ec1_script_log}" 2>&1
     exit 1
 fi
-echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
+then
+    echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+fi
 if [[ ! -f ${ec1_script_log} ]]
 then
     echo "ERROR: can't write log file ${ec1_script_log} (from script ${0})" 2>&1
