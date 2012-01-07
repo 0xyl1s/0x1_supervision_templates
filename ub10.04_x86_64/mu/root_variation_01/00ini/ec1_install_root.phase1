@@ -14,7 +14,7 @@ date +%Y-%m-%d_%H%M%S
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir="${HOME}/.ec1.ini"
+ec1_user_inidir="$(dirname ${0})"
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 ec1_user_basedir="${HOME}/.ec1"
 ec1_user_mu_basedir="${HOME}/.ec1/00mu"
@@ -35,6 +35,11 @@ then
     exit 1
 fi
 echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+if [[ ! -f ${ec1_script_log} ]]
+then
+    echo "ERROR: can't write log file ${ec1_script_log} (from script ${0})" 2>&1
+    exit 1
+fi
 #}}}
 
 umask 077
@@ -60,7 +65,6 @@ mkdir -p ${ec1_user_mu_basedir}
 mkdir -p ${ec1_user_mu_basedir}/ec1_softs_installed/00bin
 mkdir ${ec1_user_basedir}/.to_cluster
 echo "created dir ${ec1_user_mu_basedir}"
-cd ${ec1_user_basedir}
 
 repositories=(
 	ec1_lib
@@ -69,11 +73,14 @@ repositories=(
 	ec1_xtra
 	ec1_xtra_livelinks
 	ec1_softs_install
+	ec1_templates
+	ec1_supervision
 	ec1_supervision_templates
 	)
 
 for repository in ${repositories[@]}
 do
+    cd ${ec1_user_basedir}
     git clone git://github.com/epiculture/${repository}.git
 done
 
@@ -109,7 +116,21 @@ then
     echo "ERROR: can't access ec1_user.openssh.default_certificate: ${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate" 2>&1
     exit 1
 fi
-mv "${ec1_user_inidir}/dispatch/user/authorized_keys" ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
+ec1_user_openssh_default_certificate=$(cat "${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate")
+ec1_user_openssh_default_certificate_files=(
+	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}"
+	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}.pub"
+	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}.pass"
+	)
+for ec1_user_openssh_default_certificate_file in ${ec1_user_openssh_default_certificate_files[@]}
+do
+    if [[ ! -f ${ec1_user_openssh_default_certificate_file} ]]
+    then
+	echo "ERROR: can't access ec1_user_openssh_default_certificate_file: ${ec1_user_openssh_default_certificate_file}" 2>&1
+	exit 1
+    fi
+done
+mv "${ec1_user_inidir}/dispatch/user/00certificates" "${ec1_user_mu_basedir}/openssh/"
 mkdir ${ec1_user_home}/.ssh
 chmod 700 ${ec1_user_home}/.ssh
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${ec1_user_home}/.ssh/
@@ -122,21 +143,24 @@ mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.p
 ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile ${ec1_user_home}/
 mv ${ec1_user_home}/.bashrc ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
 ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${ec1_user_home}/
+
 #mc
 mkdir ${ec1_user_home}/.mc
 ln -s ${ec1_user_mu_basedir}/mc/00livelinks/ini/ini ${ec1_user_home}/.mc/
 ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${ec1_user_home}/.mc/
+
 #screen
 ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${ec1_user_home}/
+
 #rvm
 ln -s ${ec1_user_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
+
 #vim
 ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${ec1_user_home}/
 ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_user_home}/
 
-ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
-chmod -R go= ${ec1_user_basedir}
+ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 

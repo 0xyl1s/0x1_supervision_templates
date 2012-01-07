@@ -14,7 +14,7 @@ date +%Y-%m-%d_%H%M%S
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir="${HOME}/.ec1.ini"
+ec1_user_inidir="$(dirname ${0})"
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 ec1_user_basedir="${HOME}/.ec1"
 ec1_user_mu_basedir="${HOME}/.ec1/00mu"
@@ -35,6 +35,11 @@ then
     exit 1
 fi
 echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+if [[ ! -f ${ec1_script_log} ]]
+then
+    echo "ERROR: can't write log file ${ec1_script_log} (from script ${0})" 2>&1
+    exit 1
+fi
 #}}}
 
 umask 077
@@ -68,22 +73,13 @@ ec1_machine_ssh_port=$(cat ${ec1_system_ms_data_dir}/machine.ssh_port)
 
 #git
 ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_user_home}/
-
-(cd ${ec1_user_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_user_mu first commit' ; cd ${ec1_user_basedir} ; git clone -l --bare ${ec1_user_mu_basedir} ${ec1_user_mu_basedir}.git ; mv ${ec1_user_mu_basedir}.git ${ec1_user_basedir}/.to_cluster/)
-ln -s ${ec1_user_mu_basedir} "${ec1_user_mu_basedir}/00sync/autocommit/"
-
-(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
-(cd ${ec1_system_ms_basedir} ; git init ; git add . ; git commit -am 'ec1_system_ms first commit' ; cd ${ec1_system_basedir} ; git clone -l --bare ${ec1_system_ms_basedir} ${ec1_system_ms_basedir}.git ; mv ${ec1_system_ms_basedir}.git ${ec1_system_basedir}/.to_cluster/)
-
 #cron
 e.cronu
-
 #openssh
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config;
 mv /etc/ssh/sshd_config ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
 service ssh restart
-
 #shorewall
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1/rules;
 ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1 /etc/shorewall/
@@ -93,6 +89,18 @@ mv /etc/default/shorewall ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_defau
 ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
 ufw disable
 shorewall start
+
+chmod -R go= ${ec1_user_mu_basedir}
+(cd ${ec1_user_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_user_mu first commit' ; cd ${ec1_user_basedir} ; git clone -l --bare ${ec1_user_mu_basedir} ${ec1_user_mu_basedir}.git ; mv ${ec1_user_mu_basedir}.git ${ec1_user_basedir}/.to_cluster/)
+ln -s ${ec1_user_mu_basedir} "${ec1_user_mu_basedir}/00sync/autocommit/"
+
+(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_user_basedir}/.to_cluster/)
+ln -s /etc "${ec1_user_mu_basedir}/00sync/autocommit/"
+
+chmod -R g-w,o= ${ec1_system_ms_basedir}
+(cd ${ec1_system_ms_basedir} ; git init ; git add . ; git commit -am 'ec1_system_ms first commit' ; cd ${ec1_system_basedir} ; git clone -l --bare ${ec1_system_ms_basedir} ${ec1_system_ms_basedir}.git ; mv ${ec1_system_ms_basedir}.git ${ec1_system_basedir}/.to_cluster/)
+ln -s ${ec1_system_ms_basedir} "${ec1_user_mu_basedir}/00sync/autocommit/"
+
 
 # >>> log end#{{{
 echo "done - $(e__datetime_sec)" > ${ec1_script_log}

@@ -6,10 +6,10 @@ mkdir -p ~/.ec1/ec1_softs_installed/00bin
 #ssh
 mkdir ~/.ssh;
 chmod 700 ~/.ssh;
-ln -s ~/.ec1/00mu/ssh/00livelinks/config/config ~/.ssh/;
-ln -s ~/.ec1/00mu/ssh/00livelinks/authorized_keys/authorized_keys ~/.ssh/;
-ln -s ~/.ec1/00mu/ssh/00certificates/id_rsa ~/.ssh/
-ln -s ~/.ec1/00mu/ssh/00certificates/id_rsa.pub ~/.ssh/id_rsa.pub
+ln -s ~/.ec1/00mu/openssh/00livelinks/config/config ~/.ssh/;
+ln -s ~/.ec1/00mu/openssh/00livelinks/authorized_keys/authorized_keys ~/.ssh/;
+ln -s ~/.ec1/00mu/openssh/00certificates/id_rsa ~/.ssh/
+ln -s ~/.ec1/00mu/openssh/00certificates/id_rsa.pub ~/.ssh/id_rsa.pub
 #bash
 mv ~/.bashrc ~/.ec1/00mu/bash/00livelinks/.bashrc/.bashrc_00ori;
 ln -s ~/.ec1/00mu/bash/00livelinks/.bashrc/.bashrc ~/;

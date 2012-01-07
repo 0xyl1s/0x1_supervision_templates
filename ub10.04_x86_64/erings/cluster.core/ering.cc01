@@ -11,18 +11,33 @@ date +%Y-%m-%d_%H%M%S
 # ――――――――――――――――――――――――――――――――――――――#}}}
 
 # >>> variables#{{{
+ec1_user_home="${HOME}"
+ec1_system_basedir="/.ec1"
+ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
+ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
 ec1_user_inidir="$(dirname ${0})"
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_home="${HOME}"
+
+ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.ering"
 #}}}
 
 # >>> log ini#{{{
-if [[ ! -d ${ec1_user_ini_logsdir} ]]
+if [[ -f ${ec1_script_log}.done ]]
 then
-    echo "ERROR: can't get access logs dir (${ec1_user_ini_logsdir})"
+    echo "script already runned: ${ec1_script_log}.done"
+    exit
+fi
+if [[ -f ${ec1_script_log} ]]
+then
+    echo "ERROR: interrupted script (${0}) execution, see log: ${ec1_script_log}" 2>&1
     exit 1
 fi
-e__datetime_sec > "${ec1_user_ini_logsdir}/ec1.ini.0"
+echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
+if [[ ! -f ${ec1_script_log} ]]
+then
+    echo "ERROR: can't write log file ${ec1_script_log} (from script ${0})" 2>&1
+    exit 1
+fi
 #}}}
 
 umask 077
@@ -39,21 +54,22 @@ then
 fi
 cat <<EC1HEREDOC > ${ec1_user_home}/.bash_login
 
-echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.sl01\n\n\n"
+source ~/.bashrc
+echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.cc01\n\n\n"
 
 EC1HEREDOC
 chmod 600 ${ec1_user_home}/.bash_login
-cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_system > ${ec1_user_ini_logsdir}/ec1.ini.system.log 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
+cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; ${ec1_user_inidir}/ec1_install_system > ${ec1_user_ini_logsdir}/ec1.ini.system.log 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
 fi
 
 if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
 fi
 
 if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; EC1__USER_HOME="${ec1_user_home}" ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
 fi
 
 if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done ]]
