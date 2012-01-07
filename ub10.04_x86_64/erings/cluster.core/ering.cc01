@@ -49,7 +49,7 @@ then
 #adding warning to .bash_login
 if [[ -f ${ec1_user_home}/.bash_login ]]
 then
-    echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already."
+    echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already." 2>&1
     exit 1
 fi
 cat <<EC1HEREDOC > ${ec1_user_home}/.bash_login
@@ -74,11 +74,17 @@ fi
 
 if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done ]]
 then
+    echo "ERROR: unfinished ec1.ini.root_phase2 (no done file here: ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done)" 2>&1
+    exit 1
 fi
 
 mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
 mv ${ec1_user_inidir} ${ec1_user_home}/.ec1/.ini_install
 echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_user_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${ec1_user_inidir}/00data/user_email.ini)
+#delay provides extra time for email transmission before reboot, just in case, might not be needed...
+sleep 10
+
+reboot
 
 # >>> log end#{{{
 e__datetime_sec > "${ec1_user_home}/.ec1/.ini_install/logs/ec1.ini.done"

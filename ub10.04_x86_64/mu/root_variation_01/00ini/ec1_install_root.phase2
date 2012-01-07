@@ -45,43 +45,130 @@ fi
 umask 077
 
 check_rvm=$(type rvm|head -1)
-if [[ ${check_rvm} == 'rvm is a function' ]]
-then
-    echo "rvm is a function indeed ..."
-else
-    echo "rvm is NOT a function ..."
-fi
-
-#ruby
-#cf rvm requirements
-aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
-#TODO: only source ~/.bashrc
-[[ -s "${ec1_user_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
-[[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
-#rvm install 1.8.7
-#rvm use 1.8.7 --default
-rvm install 1.9.3
-rvm use 1.9.3 --default
-
-if [ -z "${RUBY_VERSION}" ]
-then
-    echo "no ruby ..."
+if [[ ! ${check_rvm} == 'rvm is a function' ]]
+    echo "ERROR: rvm is NOT a function ..." 2>&1
     exit 1
 fi
 
-ec1_machine_ssh_port=$(cat ${ec1_system_ms_data_dir}/machine.ssh_port)
+# ruby
+# cf rvm requirements
+aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
+# TODO: only source ~/.bashrc
+[[ -s "${ec1_user_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
+[[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
+rvm install 1.9.3
+rvm use 1.9.3 --default
+if [ -z "${RUBY_VERSION}" ]
+then
+    echo "ERROR: no ruby ..." 2>&1
+    exit 1
+fi
 
-#git
+# finishing system ms installation
+mv ${ec1_user_inidir}/dispatch/system/00data ${ec1_system_ms_basedir}/
+ec1_data_system_files=(
+	${ec1_system_ms_data_dir}/entity.domain
+	${ec1_system_ms_data_dir}/machine.hostname
+	${ec1_system_ms_data_dir}/machine.ssh_port
+	)
+for ec1_data_system_file in ${ec1_data_system_files[@]}
+do
+    if [[ ! -f ${ec1_data_system_file} ]]
+    then
+	echo "ERROR: can't access ec1_data_system_file: ${ec1_data_system_file}" 2>&1
+	exit 1
+    fi
+done
+ec1_system_machine_hostname=$(cat "${ec1_system_ms_data_dir}/machine.hostname")
+ec1_system_entity_domain=$(cat "${ec1_system_ms_data_dir}/entity.domain")
+ec1_machine_ssh_port=$(cat ${ec1_system_ms_data_dir}/machine.ssh_port)
+ec1_system_machine_fqdn="${ec1_system_machine_hostname}.${ec1_system_entity_domain}"
+
+# importing and checking mu 00data
+mv "${ec1_user_inidir}/dispatch/user/00data" "${ec1_user_mu_basedir}/"
+ec1_data_user_files=(
+	${ec1_user_mu_data_dir}/authorized_keys
+	${ec1_user_mu_data_dir}/user.name
+	${ec1_user_mu_data_dir}/user.email
+	${ec1_user_mu_data_dir}/user.password
+	${ec1_user_mu_data_dir}/user.entity
+	)
+for ec1_data_user_file in ${ec1_data_user_files[@]}
+do
+    if [[ ! -f ${ec1_data_user_file} ]]
+    then
+	echo "ERROR: can't access ec1_data_user_file: ${ec1_data_user_file}" 2>&1
+	exit 1
+    fi
+done
+ec1_user_name=$(cat ${ec1_user_mu_data_dir}/user.name)
+ec1_user_email=$(cat ${ec1_user_mu_data_dir}/user.email)
+
+
+# user openssh
+# importing and checking user mu 00certificates
+mv "${ec1_user_inidir}/dispatch/user/00certificates" "${ec1_user_mu_basedir}/openssh/"
+ec1_user_openssh_certificates_dir="${ec1_user_mu_basedir}/openssh/00certificates"
+if [[ ! -f ${ec1_user_openssh_certificates_dir}/user.openssh_defcert ]]
+then
+    echo "ERROR: can't access user.openssh_defcert: ${ec1_user_openssh_certificates_dir}/user.openssh_defcert" 2>&1
+    exit 1
+fi
+mv "${ec1_user_openssh_certificates_dir}/user.openssh_defcert" "${ec1_user_mu_data_dir}/"
+ec1_user_openssh_defcert=$(cat "${ec1_user_mu_data_dir}/user.openssh_defcert")
+ec1_user_openssh_default_certificate_files=(
+	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}"
+	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}.pub"
+	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}.passcode"
+	)
+for ec1_user_openssh_default_certificate_file in ${ec1_user_openssh_default_certificate_files[@]}
+do
+    if [[ ! -f ${ec1_user_openssh_default_certificate_file} ]]
+    then
+	echo "ERROR: can't access ec1_user_openssh_default_certificate_file: ${ec1_user_openssh_default_certificate_file}" 2>&1
+	exit 1
+    fi
+done
+
+mv "${ec1_user_mu_data_dir}/authorized_keys" ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
+user_ssh_dir="${ec1_user_home}/.ssh"
+if [[ -d "${user_ssh_dir}__pre-ec1" ]]
+then
+    echo "ERROR: directory ${user_ssh_dir}__pre-ec1 already exists" 2>&1
+    exit 1
+fi
+if [[ -d ${user_ssh_dir} ]]
+then
+    mv "${user_ssh_dir}" "${user_ssh_dir}__pre-ec1"
+fi
+mkdir ${user_ssh_dir}
+chmod 700 ${user_ssh_dir}
+ln -s "${ec1_user_mu_basedir}/openssh/00livelinks/config/config" "${user_ssh_dir}/"
+ln -s "${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys" "${user_ssh_dir}/"
+ln -s "${ec1_user_mu_basedir}/openssh/00certificates/id_rsa" "${user_ssh_dir}/"
+ln -s "${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub" "${user_ssh_dir}/"
+
+
+# git
+ruby -p -i -e "gsub(/@@_ec1_user_name_@@/,\"${ec1_user_name}\")" ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
+ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_user_email}\")" ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
 ln -s ${ec1_user_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_user_home}/
-#cron
+
+# cron
+ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_user_email}\")" ${ec1_user_mu_basedir}/cron/00config/crontab.ec1local
 e.cronu
-#openssh
-ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config;
+
+# system hostname
+cp -p /etc/hostname ${ec1_system_ms_data_dir}/etc_hostname_00ori
+cat "${ec1_system_machine_fqdn}" > /etc/hostname
+
+# system openssh
+ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config
 mv /etc/ssh/sshd_config ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
 ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
 service ssh restart
-#shorewall
-ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1/rules;
+# system shorewall
+ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1/rules
 ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/00configs/01/ec1 /etc/shorewall/
 mv /etc/shorewall/shorewall.conf ${ec1_user_mu_basedir}/shorewall/00livelinks/shorewall.conf/shorewall.conf_00ori
 ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/shorewall.conf/shorewall.conf /etc/shorewall/
@@ -89,6 +176,12 @@ mv /etc/default/shorewall ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_defau
 ln -s ${ec1_user_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
 ufw disable
 shorewall start
+
+# system postfix
+echo "postfix postfix/main_mailer_type        select  Internet Site" | debconf-set-selections
+echo "postfix postfix/mailname        string  ${ec1_system_machine_fqdn}" | debconf-set-selections
+aptitude install postfix mailutils -y
+
 
 chmod -R go= ${ec1_user_mu_basedir}
 (cd ${ec1_user_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_user_mu first commit' ; cd ${ec1_user_basedir} ; git clone -l --bare ${ec1_user_mu_basedir} ${ec1_user_mu_basedir}.git ; mv ${ec1_user_mu_basedir}.git ${ec1_user_basedir}/.to_cluster/)

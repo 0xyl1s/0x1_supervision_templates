@@ -86,57 +86,6 @@ done
 
 rsync -avh --no-o --no-g --stats ${ec1_user_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${ec1_user_mu_basedir}/
 rm -R ${ec1_user_basedir}/ec1_supervision_templates
-mv ${ec1_user_inidir}/dispatch/user/00data ${ec1_user_mu_basedir}/
-
-ec1_data_user_files=(
-	${ec1_user_mu_data_dir}/authorized_keys
-	${ec1_user_mu_data_dir}/user.name
-	${ec1_user_mu_data_dir}/user.email
-	${ec1_user_mu_data_dir}/user.password
-	${ec1_user_mu_data_dir}/user.entity
-	)
-for ec1_data_user_file in ${ec1_data_user_files[@]}
-do
-    if [[ ! -f ${ec1_data_user_file} ]]
-    then
-	echo "ERROR: can't access ec1_data_user_file: ${ec1_data_user_file}" 2>&1
-	exit 1
-    fi
-done
-
-#openssh
-if [[ ! -f ${ec1_user_inidir}/dispatch/user/authorized_keys ]]
-then
-    echo "ERROR: can't access ec1_data_user_file: ${ec1_user_inidir}/dispatch/user/authorized_keys" 2>&1
-    exit 1
-fi
-mv "${ec1_user_inidir}/dispatch/user/authorized_keys" ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
-if [[ ! -f ${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate ]]
-then
-    echo "ERROR: can't access ec1_user.openssh.default_certificate: ${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate" 2>&1
-    exit 1
-fi
-ec1_user_openssh_default_certificate=$(cat "${ec1_user_inidir}/dispatch/user/00certificates/ec1_user.openssh.default_certificate")
-ec1_user_openssh_default_certificate_files=(
-	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}"
-	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}.pub"
-	"${ec1_user_inidir}/dispatch/user/00certificates/${ec1_user_openssh_default_certificate}.pass"
-	)
-for ec1_user_openssh_default_certificate_file in ${ec1_user_openssh_default_certificate_files[@]}
-do
-    if [[ ! -f ${ec1_user_openssh_default_certificate_file} ]]
-    then
-	echo "ERROR: can't access ec1_user_openssh_default_certificate_file: ${ec1_user_openssh_default_certificate_file}" 2>&1
-	exit 1
-    fi
-done
-mv "${ec1_user_inidir}/dispatch/user/00certificates" "${ec1_user_mu_basedir}/openssh/"
-mkdir ${ec1_user_home}/.ssh
-chmod 700 ${ec1_user_home}/.ssh
-ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/config/config ${ec1_user_home}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys ${ec1_user_home}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa ${ec1_user_home}/.ssh/
-ln -s ${ec1_user_mu_basedir}/openssh/00certificates/id_rsa.pub ${ec1_user_home}/.ssh/
 
 #bash
 mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori

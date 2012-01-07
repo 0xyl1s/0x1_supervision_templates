@@ -68,26 +68,6 @@ done
 
 rsync -avh --no-o --no-g --stats ${ec1_system_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/system_variation_01/ ${ec1_system_ms_basedir}/
 rm -R ${ec1_system_basedir}/ec1_supervision_templates
-mv ${ec1_user_inidir}/dispatch/system/00data ${ec1_system_ms_basedir}/
-
-ec1_data_system_files=(
-	${ec1_system_ms_data_dir}/entity.domain
-	${ec1_system_ms_data_dir}/machine.hostname
-	${ec1_system_ms_data_dir}/machine.ssh_port
-	)
-for ec1_data_system_file in ${ec1_data_system_files[@]}
-do
-    if [[ ! -f ${ec1_data_system_file} ]]
-    then
-	echo "ERROR: can't access ec1_data_system_file: ${ec1_data_system_file}" 2>&1
-	exit 1
-    fi
-done
-ec1_system_machine_hostname=$(cat "${ec1_system_ms_data_dir}/machine.hostname")
-ec1_system_entity_domain=$(cat "${ec1_system_ms_data_dir}/entity.domain")
-ec1_system_machine_fqdn="${ec1_system_machine_hostname}.${ec1_system_entity_domain}"
-cp -p /etc/hostname ${ec1_system_ms_data_dir}/etc_hostname_00ori
-cat "${ec1_system_machine_fqdn}" > /etc/hostname
 
 #network
 cp /etc/network/interfaces ${ec1_system_ms_basedir}/network/00livelinks/interfaces/interfaces_00ori
@@ -98,7 +78,7 @@ ln -s ${ec1_system_ms_basedir}/network/00livelinks/interfaces/interfaces /etc/ne
 mv /etc/login.defs ${ec1_system_ms_basedir}/bash/00livelinks/etc_login.defs/login.defs_00ori
 ln -s ${ec1_system_ms_basedir}/bash/00livelinks/etc_login.defs/login.defs /etc/
 
-#TODO: check file and folder creation umask, may need to activate common-session following operations
+#TODO: check file and folder creation umask, may need to activate common-session
 #mv /etc/pam.d/common-session ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session_00ori
 #ln -s ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session /etc/pam.d/
 
@@ -116,9 +96,8 @@ ln -s ${ec1_system_ms_basedir}/rvm/00livelinks/etc_rvmrc/rvmrc /etc/
 DEBIAN_FRONTEND=noninteractive aptitude update; aptitude full-upgrade -y
 aptitude install debconf-utils -y
 echo "dash dash/sh boolean false"| debconf-set-selections; dpkg-reconfigure -f noninteractive dash
-echo "postfix postfix/main_mailer_type        select  Internet Site" | debconf-set-selections
-echo "postfix postfix/mailname        string  ${ec1_system_machine_fqdn}" | debconf-set-selections
-aptitude install ntp sshfs shorewall mc tar gzip lzma rar unrar bzip2 arj lha rpm unace zip unzip p7zip vim clamav ncdu htop ttf-ubuntu-font-family ttf-droid ttf-liberation screen postfix mailutils -y
+# TODO: check dependencies, particularly if the install of postfix in subsequent phases do not trigger the install of another SMTP server
+aptitude install ntp sshfs shorewall mc tar gzip lzma rar unrar bzip2 arj lha rpm unace zip unzip p7zip vim clamav ncdu htop ttf-ubuntu-font-family ttf-droid ttf-liberation screen -y
 aptitude clean
 
 # >>> log end#{{{
