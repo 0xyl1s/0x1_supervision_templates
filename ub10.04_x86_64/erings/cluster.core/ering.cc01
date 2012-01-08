@@ -62,17 +62,17 @@ echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.e
 
 EC1HEREDOC
 chmod 600 ${ec1_user_home}/.bash_login
-cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; ${ec1_user_inidir}/ec1_install_system > ${ec1_user_ini_logsdir}/ec1.ini.system.log 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
+cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; ${ec1_user_inidir}/ec1_install_system > ${ec1_user_ini_logsdir}/ec1.ini.system 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
 fi
 
 if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; ${ec1_user_inidir}/ec1_install_root.phase1 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase1 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
 fi
 
 if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.log 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
+    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; ${ec1_user_inidir}/ec1_install_root.phase2 > ${ec1_user_ini_logsdir}/ec1.ini.root_phase2 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
 fi
 
 if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done ]]
