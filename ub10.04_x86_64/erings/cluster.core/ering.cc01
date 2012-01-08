@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/cluster.core/ering.cc01
 
+
+# TODO: tests
+
+
 # ____________________________________________________________________
 # >>>>>  ec1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # cd ${ec1_user_home}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${ec1_user_home}/.ec1_erase/ec1_install_root.phase2
 
+
+# TODO: tests
+
+
 # ____________________________________________________________________
 # >>>>>  ec1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
 
@@ -46,19 +50,18 @@ fi
 
 umask 077
 
-check_rvm=$(type rvm|head -1)
-if [[ ! ${check_rvm} == 'rvm is a function' ]]
-then
-    echo "ERROR: rvm is NOT a function ..." 2>&1
-    exit 1
-fi
-
 # ruby
 # cf rvm requirements
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
 # TODO: only source ~/.bashrc
 [[ -s "${ec1_user_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
 [[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
+check_rvm=$(type rvm|head -1)
+if [[ ! ${check_rvm} == 'rvm is a function' ]]
+then
+    echo "ERROR: rvm is NOT a function ..." 2>&1
+    exit 1
+fi
 rvm install 1.9.3
 rvm use 1.9.3 --default
 if [ -z "${RUBY_VERSION}" ]
