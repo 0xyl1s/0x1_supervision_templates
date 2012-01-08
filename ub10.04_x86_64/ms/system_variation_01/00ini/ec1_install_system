@@ -102,7 +102,7 @@ aptitude clean
 
 # >>> log end#{{{
 echo "${0} done - $(e__datetime_sec)" >> ${ec1_script_log}
-e__datetime_sec > ${ec1_script_log}.done
+echo "$(e__datetime_sec)" > ${ec1_script_log}.done
 #}}}
 
 #UNSURE: sleeping to provide enough time for reboot execution (it seems that subsequent commands called after the execution of this script begin before effective reboot)
