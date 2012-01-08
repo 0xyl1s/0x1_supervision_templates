@@ -114,7 +114,7 @@ ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
 # >>> log end#{{{
-echo "done - $(e__datetime_sec)" > ${ec1_script_log}
+echo "done - $(e__datetime_sec)" >> ${ec1_script_log}
 e__datetime_sec > ${ec1_script_log}.done
 #}}}
 

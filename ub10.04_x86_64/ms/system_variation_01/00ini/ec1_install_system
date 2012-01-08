@@ -101,7 +101,7 @@ aptitude install ntp sshfs shorewall mc tar gzip lzma rar unrar bzip2 arj lha rp
 aptitude clean
 
 # >>> log end#{{{
-echo "${0} done - $(e__datetime_sec)" > ${ec1_script_log}
+echo "${0} done - $(e__datetime_sec)" >> ${ec1_script_log}
 e__datetime_sec > ${ec1_script_log}.done
 #}}}
 

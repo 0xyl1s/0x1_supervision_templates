@@ -196,7 +196,7 @@ ln -s ${ec1_system_ms_basedir} "${ec1_user_mu_basedir}/00sync/autocommit/"
 
 
 # >>> log end#{{{
-echo "done - $(e__datetime_sec)" > ${ec1_script_log}
+echo "done - $(e__datetime_sec)" >> ${ec1_script_log}
 e__datetime_sec > ${ec1_script_log}.done
 #}}}
 
