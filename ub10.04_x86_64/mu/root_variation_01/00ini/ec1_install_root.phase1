@@ -17,8 +17,9 @@ ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
 ec1_user_inidir_relative="$(dirname ${0})"
 ec1_user_inidir=$(cd ${ec1_user_inidir_relative}; pwd)
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_basedir="${HOME}/.ec1"
-ec1_user_mu_basedir="${HOME}/.ec1/00mu"
+ec1_user_home="${HOME}"
+ec1_user_basedir="${ec1_user_home}/.ec1"
+ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
 ec1_user_mu_data_dir="${ec1_user_mu_basedir}/00data"
 
 ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.root_phase1"
