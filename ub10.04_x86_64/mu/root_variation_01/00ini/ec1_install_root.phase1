@@ -61,10 +61,6 @@ then
     echo "ERROR: directory ${ec1_user_basedir} exists already" 2>&1
     exit 1
 fi
-if [[ -d ${ec1_user_home}/.ssh ]]
-then
-    mv ${ec1_user_home}/.ssh ${ec1_user_home}/.ssh__pre-ec1
-fi
 
 mkdir -p ${ec1_user_mu_basedir}
 mkdir -p ${ec1_user_mu_basedir}/ec1_softs_installed/00bin
