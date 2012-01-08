@@ -48,6 +48,7 @@ umask 077
 
 check_rvm=$(type rvm|head -1)
 if [[ ! ${check_rvm} == 'rvm is a function' ]]
+then
     echo "ERROR: rvm is NOT a function ..." 2>&1
     exit 1
 fi
