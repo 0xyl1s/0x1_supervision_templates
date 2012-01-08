@@ -3,15 +3,13 @@
 [core]
 	editor = /usr/bin/vim
 [alias]
-; >>> ec1livetemplate >> git_shortcuts_variation_01
 	l = log --pretty=oneline
 	c = config --global --list
 	cam = commit -am
 	s = status
 	p = pull
-; <<< ec1livetemplate << git_shortcuts_variation_01
 [merge]
 	tool = /usr/bin/gvimdiff
 [user]
-	name = pierremael.cretinon
-	email = pierremael.cretinon@helianova.com
+	name = @@_ec1_user_name_@@
+	email = @@_ec1_user_email_@@

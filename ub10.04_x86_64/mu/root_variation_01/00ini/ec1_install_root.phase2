@@ -2,7 +2,7 @@
 # cd ${ec1_user_home}/.ec1_erase ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/mu/ub10.04_x86_64/root_variation_01/00ini/ec1_install_root.phase2 ; bash ${ec1_user_home}/.ec1_erase/ec1_install_root.phase2
 
 
-# TODO: tests
+# TODO: comprehensive tests
 
 
 # ____________________________________________________________________
@@ -18,9 +18,9 @@ date +%Y-%m-%d_%H%M%S
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir_relative="$(dirname ${0})"
-ec1_user_inidir=$(cd ${ec1_user_inidir_relative}; pwd)
+ec1_user_inidir=$(cd (dirname ${0}); pwd)
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
+ec1_user_ini_datadir="${ec1_user_inidir}/dispatch/user/00data"
 ec1_user_home="${HOME}"
 ec1_user_basedir="${ec1_user_home}/.ec1"
 ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
@@ -91,13 +91,32 @@ ec1_machine_ssh_port=$(cat ${ec1_system_ms_data_dir}/machine.ssh_port)
 ec1_system_machine_fqdn="${ec1_system_machine_hostname}.${ec1_system_entity_domain}"
 
 # importing and checking mu 00data
-mv "${ec1_user_inidir}/dispatch/user/00data" "${ec1_user_mu_basedir}/"
+directories_to_check=(
+	$ec1_user_ini_datadir
+	$ec1_user_mu_data_dir
+	)
+for directory in ${directories_to_check[@]}
+do
+    if [[ ! -d ${directory} ]]
+    then
+	echo "ERROR: can't access directory ${directory}" 2>&1
+	exit 1
+    fi
+done
+rsync -avh --no-o --no-g --remove-source-files "${ec1_user_ini_datadir}/" "${ec1_user_mu_data_dir}/"
+rmdir -p ${ec1_user_ini_datadir}
+if [[ -d ${ec1_user_ini_datadir} ]]
+then
+    echo "ERROR: can't remove directory ${ec1_user_ini_datadir}" 2>&1
+    exit 1
+fi
+
 ec1_data_user_files=(
 	${ec1_user_mu_data_dir}/authorized_keys
 	${ec1_user_mu_data_dir}/user.name
 	${ec1_user_mu_data_dir}/user.email
 	${ec1_user_mu_data_dir}/user.password
-	${ec1_user_mu_data_dir}/user.entity
+	${ec1_user_mu_data_dir}/entity.domain
 	)
 for ec1_data_user_file in ${ec1_data_user_files[@]}
 do
@@ -184,6 +203,7 @@ ufw disable
 shorewall start
 
 # system postfix
+# TODO: check if installing postfix in subsequent phases do not trigger the install of another SMTP server during initial system base installations
 echo "postfix postfix/main_mailer_type        select  Internet Site" | debconf-set-selections
 echo "postfix postfix/mailname        string  ${ec1_system_machine_fqdn}" | debconf-set-selections
 aptitude install postfix mailutils -y

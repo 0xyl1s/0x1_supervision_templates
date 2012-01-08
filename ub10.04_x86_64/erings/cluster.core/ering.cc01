@@ -2,7 +2,7 @@
 # https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/cluster.core/ering.cc01
 
 
-# TODO: tests
+# TODO: comprehensive tests
 
 
 # ____________________________________________________________________
@@ -19,8 +19,7 @@ ec1_user_home="${HOME}"
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir_relative="$(dirname ${0})"
-ec1_user_inidir=$(cd ${ec1_user_inidir_relative}; pwd)
+ec1_user_inidir=$(cd (dirname ${0}); pwd)
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 
 ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.ering"

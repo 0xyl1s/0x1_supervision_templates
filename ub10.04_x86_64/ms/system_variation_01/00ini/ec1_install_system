@@ -2,7 +2,7 @@
 # https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system
 
 
-# TODO: tests
+# TODO: comprehensive tests
 
 
 # ____________________________________________________________________
@@ -18,8 +18,7 @@ date +%Y-%m-%d_%H%M%S
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir_relative="$(dirname ${0})"
-ec1_user_inidir=$(cd ${ec1_user_inidir_relative}; pwd)
+ec1_user_inidir=$(cd (dirname ${0}); pwd)
 ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
 
 ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.system"
@@ -109,7 +108,6 @@ ln -s ${ec1_system_ms_basedir}/rvm/00livelinks/etc_rvmrc/rvmrc /etc/
 DEBIAN_FRONTEND=noninteractive aptitude update; aptitude full-upgrade -y
 aptitude install debconf-utils -y
 echo "dash dash/sh boolean false"| debconf-set-selections; dpkg-reconfigure -f noninteractive dash
-# TODO: check dependencies, particularly if the install of postfix in subsequent phases do not trigger the install of another SMTP server
 aptitude install ntp sshfs shorewall mc tar gzip lzma rar unrar bzip2 arj lha rpm unace zip unzip p7zip vim clamav ncdu htop ttf-ubuntu-font-family ttf-droid ttf-liberation screen -y
 aptitude clean
 

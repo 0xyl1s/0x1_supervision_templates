@@ -22,7 +22,7 @@
 # m h  dom mon dow   command
 
 SHELL='/bin/bash'
-MAILTO='epima@3eclipses.com'
+MAILTO='@@_ec1_user_email_@@'
 
 0 * * * * source ~/.bashrc ; ec1.sync_pull >> ~/.ec1/00mu/00logs/cron_ec1.sync_pull 2>&1
 0 2 * * * source ~/.bashrc ; ec1.autocommit >> ~/.ec1/00mu/00logs/cron_ec1.sync_autocommit 2>&1

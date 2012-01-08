@@ -11,5 +11,5 @@
 [merge]
 	tool = /usr/bin/gvimdiff
 [user]
-	name = pierremael.cretinon
-	email = pierremael.cretinon@helianova.com
+	name = @@_ec1_user_name_@@
+	email = @@_ec1_user_email_@@
