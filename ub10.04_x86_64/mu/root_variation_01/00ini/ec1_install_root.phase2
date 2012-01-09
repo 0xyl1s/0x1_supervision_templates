@@ -47,7 +47,7 @@ then
 fi
 #}}}
 
-umask 077
+umask 0027
 
 # ruby
 # cf rvm requirements

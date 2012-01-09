@@ -46,7 +46,7 @@ then
 fi
 #}}}
 
-umask 077
+umask 0027
 
 groupadd ec1_local
 chgrp -R ec1_local ${ec1_system_basedir}

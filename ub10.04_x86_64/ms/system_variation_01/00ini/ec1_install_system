@@ -45,7 +45,7 @@ then
 fi
 #}}}
 
-umask 027
+umask 0027
 ufw allow 22/tcp
 ufw --force enable
 
@@ -91,8 +91,8 @@ mv /etc/login.defs ${ec1_system_ms_basedir}/bash/00livelinks/etc_login.defs/logi
 ln -s ${ec1_system_ms_basedir}/bash/00livelinks/etc_login.defs/login.defs /etc/
 
 #TODO: check file and folder creation umask, may need to activate common-session
-#mv /etc/pam.d/common-session ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session_00ori
-#ln -s ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session /etc/pam.d/
+mv /etc/pam.d/common-session ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session_00ori
+ln -s ${ec1_system_ms_basedir}/pam/00livelinks/etc_common-session/common-session /etc/pam.d/
 
 #apt
 mv /etc/apt/sources.list ${ec1_system_ms_basedir}/apt/00livelinks/sources.list/sources.list_00ori
