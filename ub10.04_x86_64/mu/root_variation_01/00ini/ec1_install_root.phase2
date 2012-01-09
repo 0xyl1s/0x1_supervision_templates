@@ -54,7 +54,10 @@ umask 077
 aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion -y
 # TODO: only source ~/.bashrc
 echo "EC1DEBUG>>> ec1_root_home = ${ec1_root_home}" >> ${ec1_script_log}
-[[ -s "${ec1_root_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
+echo "EC1DEBUG2>>> rvm_script (ec1_root_home) = ${ec1_root_home}/.rvm/scripts/rvm" >> ${ec1_script_log}
+echo "EC1DEBUG3>>> rvm_script (HOME) = ${HOME}/.rvm/scripts/rvm" >> ${ec1_script_log}
+#[[ -s "${ec1_root_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && . "${HOME}/.rvm/scripts/rvm" # Load RVM function
 [[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
 check_rvm=$(type rvm|head -1)
 if [[ ! ${check_rvm} == 'rvm is a function' ]]
