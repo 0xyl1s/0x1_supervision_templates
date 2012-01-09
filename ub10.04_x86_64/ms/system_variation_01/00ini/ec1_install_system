@@ -18,10 +18,10 @@ date +%Y-%m-%d_%H%M%S
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir=$(cd $(dirname ${0}); pwd)
-ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
+ec1_root_inidir=$(cd $(dirname ${0}); pwd)
+ec1_root_ini_logsdir="${ec1_root_inidir}/logs"
 
-ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.system"
+ec1_script_log="${ec1_root_ini_logsdir}/ec1.ini.system"
 #}}}
 
 # >>> log ini#{{{
@@ -36,7 +36,7 @@ then
     exit 1
 fi
 echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
-echo "DEBUG: ec1_user_inidir = ${ec1_user_inidir}" >> ${ec1_script_log}
+echo "DEBUG: ec1_root_inidir = ${ec1_root_inidir}" >> ${ec1_script_log}
 echo "DEBUG: ec1_script_log = ${ec1_script_log}" >> ${ec1_script_log}
 if [[ ! -f ${ec1_script_log} ]]
 then

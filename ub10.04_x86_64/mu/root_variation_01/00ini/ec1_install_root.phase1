@@ -17,15 +17,14 @@ date +%Y-%m-%d_%H%M%S
 # >>> variables#{{{
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
-ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir=$(cd $(dirname ${0}); pwd)
-ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
-ec1_user_home="${HOME}"
-ec1_user_basedir="${ec1_user_home}/.ec1"
-ec1_user_mu_basedir="${ec1_user_home}/.ec1/00mu"
-ec1_user_mu_data_dir="${ec1_user_mu_basedir}/00data"
+ec1_root_inidir=$(cd $(dirname ${0}); pwd)
+ec1_root_ini_logsdir="${ec1_root_inidir}/logs"
+ec1_root_home="${HOME}"
+ec1_root_basedir="${ec1_root_home}/.ec1"
+ec1_root_mu_basedir="${ec1_root_home}/.ec1/00mu"
+ec1_root_mu_data_dir="${ec1_root_mu_basedir}/00data"
 
-ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.root_phase1"
+ec1_script_log="${ec1_root_ini_logsdir}/ec1.ini.root_phase1"
 #}}}
 
 # >>> log ini#{{{
@@ -56,16 +55,16 @@ chgrp ec1_local /00transfert
 chmod 770 /00transfert
 
 
-if [[ -d ${ec1_user_basedir} ]]
+if [[ -d ${ec1_root_basedir} ]]
 then
-    echo "ERROR: directory ${ec1_user_basedir} exists already" 2>&1
+    echo "ERROR: directory ${ec1_root_basedir} exists already" 2>&1
     exit 1
 fi
 
-mkdir -p ${ec1_user_mu_basedir}
-mkdir -p ${ec1_user_mu_basedir}/ec1_softs_installed/00bin
-mkdir ${ec1_user_basedir}/.to_cluster
-echo "created dir ${ec1_user_mu_basedir}"
+mkdir -p ${ec1_root_mu_basedir}
+mkdir -p ${ec1_root_mu_basedir}/ec1_softs_installed/00bin
+mkdir ${ec1_root_basedir}/.to_cluster
+echo "created dir ${ec1_root_mu_basedir}"
 
 repositories=(
 	ec1_lib
@@ -81,36 +80,36 @@ repositories=(
 
 for repository in ${repositories[@]}
 do
-    cd ${ec1_user_basedir}
+    cd ${ec1_root_basedir}
     git clone git://github.com/epiculture/${repository}.git
 done
 
-rsync -avh --no-o --no-g --stats ${ec1_user_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${ec1_user_mu_basedir}/
-rm -R ${ec1_user_basedir}/ec1_supervision_templates
+rsync -avh --no-o --no-g --stats ${ec1_root_basedir}/ec1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${ec1_root_mu_basedir}/
+rm -R ${ec1_root_basedir}/ec1_supervision_templates
 
 #bash
-mv ${ec1_user_home}/.profile ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
-ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.profile/.profile ${ec1_user_home}/
-mv ${ec1_user_home}/.bashrc ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
-ln -s ${ec1_user_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${ec1_user_home}/
+mv ${ec1_root_home}/.profile ${ec1_root_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
+ln -s ${ec1_root_mu_basedir}/bash/00livelinks/.profile/.profile ${ec1_root_home}/
+mv ${ec1_root_home}/.bashrc ${ec1_root_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
+ln -s ${ec1_root_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${ec1_root_home}/
 
 #mc
-mkdir ${ec1_user_home}/.mc
-ln -s ${ec1_user_mu_basedir}/mc/00livelinks/ini/ini ${ec1_user_home}/.mc/
-ln -s ${ec1_user_mu_basedir}/mc/00livelinks/bindings/bindings ${ec1_user_home}/.mc/
+mkdir ${ec1_root_home}/.mc
+ln -s ${ec1_root_mu_basedir}/mc/00livelinks/ini/ini ${ec1_root_home}/.mc/
+ln -s ${ec1_root_mu_basedir}/mc/00livelinks/bindings/bindings ${ec1_root_home}/.mc/
 
 #screen
-ln -s ${ec1_user_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${ec1_user_home}/
+ln -s ${ec1_root_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${ec1_root_home}/
 
 #rvm
-ln -s ${ec1_user_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
+ln -s ${ec1_root_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
 
 #vim
-ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vim/.vim ${ec1_user_home}/
-ln -s ${ec1_user_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_user_home}/
+ln -s ${ec1_root_mu_basedir}/vim/00livelinks/.vim/.vim ${ec1_root_home}/
+ln -s ${ec1_root_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_root_home}/
 
 
-ln -s ${ec1_user_mu_basedir}/.recycle ${ec1_user_home}/
+ln -s ${ec1_root_mu_basedir}/.recycle ${ec1_root_home}/
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 

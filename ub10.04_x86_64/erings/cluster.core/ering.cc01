@@ -15,14 +15,14 @@ date +%Y-%m-%d_%H%M%S
 # ――――――――――――――――――――――――――――――――――――――#}}}
 
 # >>> variables#{{{
-ec1_user_home="${HOME}"
+ec1_root_home="${HOME}"
 ec1_system_basedir="/.ec1"
 ec1_system_ms_basedir="${ec1_system_basedir}/00ms"
 ec1_system_ms_data_dir="${ec1_system_basedir}/00ms/00data"
-ec1_user_inidir=$(cd $(dirname ${0}); pwd)
-ec1_user_ini_logsdir="${ec1_user_inidir}/logs"
+ec1_root_inidir=$(cd $(dirname ${0}); pwd)
+ec1_root_ini_logsdir="${ec1_root_inidir}/logs"
 
-ec1_script_log="${ec1_user_ini_logsdir}/ec1.ini.ering"
+ec1_script_log="${ec1_root_ini_logsdir}/ec1.ini.ering"
 #}}}
 
 # >>> log ini#{{{
@@ -31,12 +31,12 @@ then
     echo "script already runned: ${ec1_script_log}.done"
     exit
 fi
-if [[ -f ${ec1_script_log} ]] && [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
+if [[ -f ${ec1_script_log} ]] && [[ ! -f ${ec1_root_ini_logsdir}/ec1.ini.system.done ]]
 then
     echo "ERROR: interrupted script (${0}) execution, see log: ${ec1_script_log}" 2>&1
     exit 1
 fi
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
+if [[ ! -f ${ec1_root_ini_logsdir}/ec1.ini.system.done ]]
 then
     echo "${0} start - $(e__datetime_sec)" > ${ec1_script_log}
 fi
@@ -52,58 +52,58 @@ umask 077
 aptitude install curl git-core -y
 
 # >>> ec1.ini.system
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
+if [[ ! -f ${ec1_root_ini_logsdir}/ec1.ini.system.done ]]
 then
 #adding warning to .bash_login
-if [[ -f ${ec1_user_home}/.bash_login ]]
+if [[ -f ${ec1_root_home}/.bash_login ]]
 then
-    echo "ERROR: file .bash_login (${ec1_user_home}/.bash_login) exists already." 2>&1
+    echo "ERROR: file .bash_login (${ec1_root_home}/.bash_login) exists already." 2>&1
     exit 1
 fi
-cat <<EC1HEREDOC > ${ec1_user_home}/.bash_login
+cat <<EC1HEREDOC > ${ec1_root_home}/.bash_login
 
 source ~/.bashrc
 echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.cc01\n\n\n"
 
 EC1HEREDOC
-chmod 600 ${ec1_user_home}/.bash_login
-cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_user_inidir}/ec1_install_system ; ${ec1_user_inidir}/ec1_install_system >> ${ec1_user_ini_logsdir}/ec1.ini.system.ering 2>${ec1_user_ini_logsdir}/ec1.ini.system.error
+chmod 600 ${ec1_root_home}/.bash_login
+cd ${ec1_root_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/ms/system_variation_01/00ini/ec1_install_system ; chmod 700 ${ec1_root_inidir}/ec1_install_system ; ${ec1_root_inidir}/ec1_install_system >> ${ec1_root_ini_logsdir}/ec1.ini.system.ering 2>${ec1_root_ini_logsdir}/ec1.ini.system.error
 fi
 # <<< ec1.ini.system
 
 
 # >>> ec1.ini.root_phase1
-if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.system.done ]]
+if [[ -f ${ec1_root_ini_logsdir}/ec1.ini.system.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase1 ; ${ec1_user_inidir}/ec1_install_root.phase1 >> ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.ering 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase1.error
+    cd ${ec1_root_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase1 ; chmod 700 ${ec1_root_inidir}/ec1_install_root.phase1 ; ${ec1_root_inidir}/ec1_install_root.phase1 >> ${ec1_root_ini_logsdir}/ec1.ini.root_phase1.ering 2>${ec1_root_ini_logsdir}/ec1.ini.root_phase1.error
 fi
 # <<< ec1.ini.root_phase1
 
 
 # >>> ec1.ini.root_phase2
-if [[ -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase1.done ]]
+if [[ -f ${ec1_root_ini_logsdir}/ec1.ini.root_phase1.done ]]
 then
-    cd ${ec1_user_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_user_inidir}/ec1_install_root.phase2 ; ${ec1_user_inidir}/ec1_install_root.phase2 >> ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.ering 2>${ec1_user_ini_logsdir}/ec1.ini.root_phase2.error
+    cd ${ec1_root_inidir} ; wget https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/ec1_install_root.phase2 ; chmod 700 ${ec1_root_inidir}/ec1_install_root.phase2 ; ${ec1_root_inidir}/ec1_install_root.phase2 >> ${ec1_root_ini_logsdir}/ec1.ini.root_phase2.ering 2>${ec1_root_ini_logsdir}/ec1.ini.root_phase2.error
 fi
 # <<< ec1.ini.root_phase2
 
 
 
 # >>> finishing
-if [[ ! -f ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done ]]
+if [[ ! -f ${ec1_root_ini_logsdir}/ec1.ini.root_phase2.done ]]
 then
-    echo "ERROR: unfinished ec1.ini.root_phase2 (no done file here: ${ec1_user_ini_logsdir}/ec1.ini.root_phase2.done)" 2>&1
+    echo "ERROR: unfinished ec1.ini.root_phase2 (no done file here: ${ec1_root_ini_logsdir}/ec1.ini.root_phase2.done)" 2>&1
     exit 1
 fi
 
-mv ${ec1_user_home}/.bash_login ${ec1_user_inidir}/00data/.bash_login__ec1
-mv ${ec1_user_inidir} ${ec1_user_home}/.ec1/.ini_install
-echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_user_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${ec1_user_inidir}/00data/user_email.ini)
+mv ${ec1_root_home}/.bash_login ${ec1_root_inidir}/00data/.bash_login__ec1
+mv ${ec1_root_inidir} ${ec1_root_home}/.ec1/.ini_install
+echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_root_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${ec1_root_inidir}/00data/user_email.ini)
 #delay provides extra time for email transmission before reboot, just in case, might not be needed...
 sleep 10
 
 # >>> log end#{{{
-e__datetime_sec > "${ec1_user_home}/.ec1/.ini_install/logs/ec1.ini.done"
+e__datetime_sec > "${ec1_root_home}/.ec1/.ini_install/logs/ec1.ini.done"
 #}}}
 
 reboot
