@@ -129,6 +129,7 @@ ec1_root_email=$(cat ${ec1_root_mu_datadir}/user.email)
 # user openssh
 # importing and checking user mu 00certificates
 mv "${ec1_root_inidir}/dispatch/root/00certificates" "${ec1_root_mu_basedir}/openssh/"
+rmdir "${ec1_root_inidir}/dispatch/system"
 rmdir -p ${ec1_root_ini_datadir}
 if [[ -d ${ec1_root_ini_datadir} ]]
 then
@@ -268,25 +269,10 @@ mv /etc/default/shorewall ${ec1_root_mu_basedir}/shorewall/00livelinks/etc_defau
 
 
 
-
-
-
-
-
-
 # WARNING : temporary disabling firewall for test systems
 #ln -s ${ec1_root_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
 ufw disable
 #shorewall start
-
-
-
-
-
-
-
-
-
 
 
 

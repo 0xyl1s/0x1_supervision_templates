@@ -97,13 +97,13 @@ then
 fi
 
 mv ${ec1_root_home}/.bash_login ${ec1_root_inidir}/00data/.bash_login__ec1
-mv ${ec1_root_inidir} ${ec1_root_home}/.ec1/.ini_install
+mv ${ec1_root_inidir} ${ec1_root_home}/.ec1/00mu/.ini_install
 echo "root ec1 base installation finished: please copy ssh certificates to ${ec1_root_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${ec1_root_inidir}/00data/user_email.ini)
 #delay provides extra time for email transmission before reboot, just in case, might not be needed...
 sleep 10
 
 # >>> log end#{{{
-e__datetime_sec > "${ec1_root_home}/.ec1/.ini_install/logs/ec1.ini.done"
+e__datetime_sec > "${ec1_root_home}/.ec1/00mu/.ini_install/logs/ec1.ini.done"
 #}}}
 
 reboot
