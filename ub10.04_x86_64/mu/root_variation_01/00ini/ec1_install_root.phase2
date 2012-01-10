@@ -234,6 +234,7 @@ fi
 ec1_mainuser_inidir="${ec1_mainuser_homedir}/.ec1.ini_user"
 mv ${ec1_mainuser_inidir_temp} ${ec1_mainuser_inidir}
 chown ${ec1_mainuser_name}:${ec1_mainuser_name} -R ${ec1_mainuser_inidir}
+chmod 700 -R ${ec1_mainuser_inidir}
 
 ec1_mainuser_ini_certificatesdir="${ec1_mainuser_inidir}/00certificates"
 if [[ ! -d ${ec1_mainuser_ini_certificatesdir} ]]
