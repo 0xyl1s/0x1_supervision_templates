@@ -56,7 +56,7 @@ aptitude install build-essential openssl libreadline6 libreadline6-dev curl git-
 echo "EC1DEBUG>>> ec1_root_home = ${ec1_root_home}" >> ${ec1_script_log}
 echo "EC1DEBUG2>>> rvm_script (ec1_root_home) = ${ec1_root_home}/.rvm/scripts/rvm" >> ${ec1_script_log}
 echo "EC1DEBUG3>>> rvm_script (HOME) = ${HOME}/.rvm/scripts/rvm" >> ${ec1_script_log}
-#[[ -s "${ec1_root_home}/.rvm/scripts/rvm" ]] && . "${ec1_user_home}/.rvm/scripts/rvm" # Load RVM function
+#[[ -s "${ec1_root_home}/.rvm/scripts/rvm" ]] && . "${ec1_root_home}/.rvm/scripts/rvm" # Load RVM function
 [[ -s "${HOME}/.rvm/scripts/rvm" ]] && . "${HOME}/.rvm/scripts/rvm" # Load RVM function
 [[ -r ${rvm_path}/scripts/completion ]] && . ${rvm_path}/scripts/completion
 check_rvm=$(type rvm|head -1)
@@ -107,58 +107,56 @@ do
     fi
 done
 rsync -avh --no-o --no-g --remove-source-files "${ec1_root_ini_datadir}/" "${ec1_root_mu_datadir}/"
-rmdir -p ${ec1_root_ini_datadir}
 if [[ -d ${ec1_root_ini_datadir} ]]
 then
     echo "ERROR: can't remove directory ${ec1_root_ini_datadir}" 2>&1
     exit 1
 fi
 
-ec1_data_user_files=(
-	${ec1_root_mu_datadir}/authorized_keys
+# TODO: should also check symlink entity.domain
+ec1_data_root_files=(
 	${ec1_root_mu_datadir}/user.name
 	${ec1_root_mu_datadir}/user.email
 	${ec1_root_mu_datadir}/user.password
-	${ec1_root_mu_datadir}/entity.domain
 	)
-for ec1_data_user_file in ${ec1_data_user_files[@]}
+for ec1_data_root_file in ${ec1_data_root_files[@]}
 do
-    if [[ ! -f ${ec1_data_user_file} ]]
+    if [[ ! -f ${ec1_data_root_file} ]]
     then
-	echo "ERROR: can't access ec1_data_user_file: ${ec1_data_user_file}" 2>&1
+	echo "ERROR: can't access ec1_data_root_file: ${ec1_data_root_file}" 2>&1
 	exit 1
     fi
 done
-ec1_user_name=$(cat ${ec1_root_mu_datadir}/user.name)
-ec1_user_email=$(cat ${ec1_root_mu_datadir}/user.email)
+ec1_root_name=$(cat ${ec1_root_mu_datadir}/user.name)
+ec1_root_email=$(cat ${ec1_root_mu_datadir}/user.email)
 
 
 # user openssh
 # importing and checking user mu 00certificates
 mv "${ec1_root_inidir}/dispatch/root/00certificates" "${ec1_root_mu_basedir}/openssh/"
-ec1_user_openssh_certificates_dir="${ec1_root_mu_basedir}/openssh/00certificates"
-if [[ ! -f ${ec1_user_openssh_certificates_dir}/user.openssh_defcert ]]
+rmdir -p ${ec1_root_ini_datadir}
+ec1_root_openssh_certificates_dir="${ec1_root_mu_basedir}/openssh/00certificates"
+if [[ ! -f ${ec1_root_openssh_certificates_dir}/user.openssh_defcert ]]
 then
-    echo "ERROR: can't access user.openssh_defcert: ${ec1_user_openssh_certificates_dir}/user.openssh_defcert" 2>&1
+    echo "ERROR: can't access user.openssh_defcert: ${ec1_root_openssh_certificates_dir}/user.openssh_defcert" 2>&1
     exit 1
 fi
-mv "${ec1_user_openssh_certificates_dir}/user.openssh_defcert" "${ec1_root_mu_datadir}/"
-ec1_user_openssh_defcert=$(cat "${ec1_root_mu_datadir}/user.openssh_defcert")
-ec1_user_openssh_default_certificate_files=(
-	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}"
-	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}.pub"
-	"${ec1_user_openssh_certificates_dir}/${ec1_user_openssh_defcert}.passcode"
+mv "${ec1_root_openssh_certificates_dir}/user.openssh_defcert" "${ec1_root_mu_datadir}/"
+ec1_root_openssh_defcert=$(cat "${ec1_root_mu_datadir}/user.openssh_defcert")
+ec1_root_openssh_default_certificate_files=(
+	"${ec1_root_openssh_certificates_dir}/${ec1_root_openssh_defcert}"
+	"${ec1_root_openssh_certificates_dir}/${ec1_root_openssh_defcert}.pub"
+	"${ec1_root_openssh_certificates_dir}/${ec1_root_openssh_defcert}.passcode"
 	)
-for ec1_user_openssh_default_certificate_file in ${ec1_user_openssh_default_certificate_files[@]}
+for ec1_root_openssh_default_certificate_file in ${ec1_root_openssh_default_certificate_files[@]}
 do
-    if [[ ! -f ${ec1_user_openssh_default_certificate_file} ]]
+    if [[ ! -f ${ec1_root_openssh_default_certificate_file} ]]
     then
-	echo "ERROR: can't access ec1_user_openssh_default_certificate_file: ${ec1_user_openssh_default_certificate_file}" 2>&1
+	echo "ERROR: can't access ec1_root_openssh_default_certificate_file: ${ec1_root_openssh_default_certificate_file}" 2>&1
 	exit 1
     fi
 done
 
-mv "${ec1_root_mu_datadir}/authorized_keys" ${ec1_root_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys
 user_ssh_dir="${ec1_root_home}/.ssh"
 if [[ -d "${user_ssh_dir}__pre-ec1" ]]
 then
@@ -172,23 +170,85 @@ fi
 mkdir ${user_ssh_dir}
 chmod 700 ${user_ssh_dir}
 ln -s "${ec1_root_mu_basedir}/openssh/00livelinks/config/config" "${user_ssh_dir}/"
-ln -s "${ec1_root_mu_basedir}/openssh/00livelinks/authorized_keys/authorized_keys" "${user_ssh_dir}/"
 ln -s "${ec1_root_mu_basedir}/openssh/00certificates/id_rsa" "${user_ssh_dir}/"
 ln -s "${ec1_root_mu_basedir}/openssh/00certificates/id_rsa.pub" "${user_ssh_dir}/"
 
 
 # git
-ruby -p -i -e "gsub(/@@_ec1_user_name_@@/,\"${ec1_user_name}\")" ${ec1_root_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
-ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_user_email}\")" ${ec1_root_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
+ruby -p -i -e "gsub(/@@_ec1_user_name_@@/,\"${ec1_root_name}\")" ${ec1_root_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
+ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_root_email}\")" ${ec1_root_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig
 ln -s ${ec1_root_mu_basedir}/git/00livelinks/.gitconfig/.gitconfig ${ec1_root_home}/
 
 # cron
-ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_user_email}\")" ${ec1_root_mu_basedir}/cron/00config/crontab.ec1local
-e.cronu
+ec1_root_mu_crontab_file="${ec1_root_mu_basedir}/cron/00config/crontab.ec1local"
+ruby -p -i -e "gsub(/@@_ec1_user_email_@@/,\"${ec1_root_email}\")" ${ec1_root_mu_crontab_file}
+cat ${ec1_root_mu_crontab_file} | crontab -
 
 # system hostname
 cp -p /etc/hostname ${ec1_system_ms_datadir}/etc_hostname_00ori
-cat "${ec1_system_machine_fqdn}" > /etc/hostname
+echo "${ec1_system_machine_fqdn}" > /etc/hostname
+
+
+# mainuser
+ec1_mainuser_inidir_temp="${ec1_root_inidir}/dispatch/mainuser"
+ec1_mainuser_ini_datadir="${ec1_mainuser_inidir_temp}/00data"
+# TODO: should also check symlink entity.domain
+ec1_data_mainuser_files=(
+	${ec1_mainuser_ini_datadir}/authorized_keys
+	${ec1_mainuser_ini_datadir}/user.name
+	${ec1_mainuser_ini_datadir}/user.uid
+	${ec1_mainuser_ini_datadir}/user.gid
+	${ec1_mainuser_ini_datadir}/user.email
+	${ec1_mainuser_ini_datadir}/user.password
+	)
+for ec1_data_mainuser_file in ${ec1_data_mainuser_files[@]}
+do
+    if [[ ! -f ${ec1_data_mainuser_file} ]]
+    then
+	echo "ERROR: can't access ec1_data_mainuser_file: ${ec1_data_mainuser_file}" 2>&1
+	exit 1
+    fi
+done
+ec1_mainuser_name=$(cat ${ec1_mainuser_ini_datadir}/user.name)
+ec1_mainuser_uid=$(cat ${ec1_mainuser_ini_datadir}/user.uid)
+ec1_mainuser_gid=$(cat ${ec1_mainuser_ini_datadir}/user.gid)
+ec1_mainuser_homedir="/home/${ec1_mainuser_name}"
+groupadd -g ${ec1_mainuser_gid} ${ec1_mainuser_name}
+ec1_mainuser_gid_check=$(getent group ec1_local|cut -d: -f3)
+if [[ ! ${ec1_mainuser_gid} == ${ec1_mainuser_gid_check} ]]
+then
+    echo "ERROR: problem creating group ${ec1_mainuser_name} with gid ${ec1_mainuser_gid} (checked gid = ${ec1_mainuser_gid_check})" 2>&1
+    exit 1
+fi
+useradd -u ${ec1_mainuser_uid} -g ${ec1_mainuser_gid} -s "/bin/bash" -m ${ec1_mainuser_name}
+
+ec1_mainuser_homedir_uid_check=$(find ${ec1_mainuser_homedir} -maxdepth 0 -uid ${ec1_mainuser_uid})
+ec1_mainuser_homedir_gid_check=$(find ${ec1_mainuser_homedir} -maxdepth 0 -gid ${ec1_mainuser_gid})
+if [[ ! ${ec1_mainuser_homedir_uid_check} == ${ec1_mainuser_homedir} ]] || [[ ! ${ec1_mainuser_homedir_gid_check} == ${ec1_mainuser_homedir} ]]
+then
+    echo "ERROR: mainuser home dir should have uid ${ec1_mainuser_uid} (checked uid = ${ec1_mainuser_homedir_uid_check}) and gid ${ec1_mainuser_gid} (checked gid = ${ec1_mainuser_homedir_gid_check})" 2>&1
+    exit 1
+fi
+ec1_mainuser_inidir="${ec1_mainuser_homedir}/.ec1.ini_user"
+mv ${ec1_mainuser_inidir_temp} ${ec1_mainuser_inidir}
+chown ${ec1_mainuser_name}:${ec1_mainuser_name} -R ${ec1_mainuser_inidir}
+
+ec1_mainuser_ini_certificatesdir="${ec1_mainuser_inidir}/00certificates"
+if [[ ! -d ${ec1_mainuser_ini_certificatesdir} ]]
+then
+    echo "ERROR: can't access ec1_mainuser_ini_certificatesdir ${ec1_mainuser_ini_certificatesdir}" 2>&1
+    exit 1
+fi
+if [[ ! -f "${ec1_mainuser_ini_certificatesdir}/authorized_keys" ]]
+then
+    echo "ERROR: can't access ec1_data_mainuser_authorized_keys: ${ec1_mainuser_ini_certificatesdir}/authorized_keys" 2>&1
+    exit 1
+fi
+ec1_mainuser_sshdir="${ec1_mainuser_homedir}/.ssh"
+mkdir ${ec1_mainuser_sshdir}
+chown ${ec1_mainuser_name}:${ec1_mainuser_name} ${ec1_mainuser_sshdir}
+chmod 700 ${ec1_mainuser_sshdir}
+ln -s "${ec1_mainuser_ini_certificatesdir}/authorized_keys" "${ec1_mainuser_sshdir}/"
 
 # system openssh
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config
@@ -235,7 +295,7 @@ aptitude install postfix mailutils -y
 
 
 chmod -R go= ${ec1_root_mu_basedir}
-(cd ${ec1_root_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_user_mu first commit' ; cd ${ec1_root_basedir} ; git clone -l --bare ${ec1_root_mu_basedir} ${ec1_root_mu_basedir}.git ; mv ${ec1_root_mu_basedir}.git ${ec1_root_basedir}/.to_cluster/)
+(cd ${ec1_root_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_root_mu first commit' ; cd ${ec1_root_basedir} ; git clone -l --bare ${ec1_root_mu_basedir} ${ec1_root_mu_basedir}.git ; mv ${ec1_root_mu_basedir}.git ${ec1_root_basedir}/.to_cluster/)
 ln -s ${ec1_root_mu_basedir} "${ec1_root_mu_basedir}/00sync/autocommit/"
 
 (cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_root_basedir}/.to_cluster/)
