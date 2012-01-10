@@ -212,14 +212,17 @@ ec1_mainuser_name=$(cat ${ec1_mainuser_ini_datadir}/user.name)
 ec1_mainuser_uid=$(cat ${ec1_mainuser_ini_datadir}/user.uid)
 ec1_mainuser_gid=$(cat ${ec1_mainuser_ini_datadir}/user.gid)
 ec1_mainuser_homedir="/home/${ec1_mainuser_name}"
+echo "EC1DEBUG>>> ec1_mainuser_uid = ${ec1_mainuser_uid}" >> ${ec1_script_log}
+echo "EC1DEBUG>>> ec1_mainuser_gid = ${ec1_mainuser_gid}" >> ${ec1_script_log}
 groupadd -g ${ec1_mainuser_gid} ${ec1_mainuser_name}
-ec1_mainuser_gid_check=$(getent group ec1_local|cut -d: -f3)
+ec1_mainuser_gid_check=$(getent group ${ec1_mainuser_name} |cut -d: -f3)
 if [[ ! ${ec1_mainuser_gid} == ${ec1_mainuser_gid_check} ]]
 then
     echo "ERROR: problem creating group ${ec1_mainuser_name} with gid ${ec1_mainuser_gid} (checked gid = ${ec1_mainuser_gid_check})" 2>&1
     exit 1
 fi
 useradd -u ${ec1_mainuser_uid} -g ${ec1_mainuser_gid} -s "/bin/bash" -m ${ec1_mainuser_name}
+adduser ${ec1_mainuser_name} ec1local
 
 ec1_mainuser_homedir_uid_check=$(find ${ec1_mainuser_homedir} -maxdepth 0 -uid ${ec1_mainuser_uid})
 ec1_mainuser_homedir_gid_check=$(find ${ec1_mainuser_homedir} -maxdepth 0 -gid ${ec1_mainuser_gid})

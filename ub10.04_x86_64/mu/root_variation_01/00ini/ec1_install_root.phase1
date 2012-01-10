@@ -48,10 +48,10 @@ fi
 
 umask 0027
 
-groupadd ec1_local
-chgrp -R ec1_local ${ec1_system_basedir}
+groupadd ec1local
+chgrp -R ec1local ${ec1_system_basedir}
 mkdir /00transfert
-chgrp ec1_local /00transfert
+chgrp ec1local /00transfert
 chmod 770 /00transfert
 
 
