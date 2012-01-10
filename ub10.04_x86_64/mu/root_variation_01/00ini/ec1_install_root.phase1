@@ -63,7 +63,7 @@ fi
 
 mkdir -p ${ec1_root_mu_basedir}
 mkdir -p ${ec1_root_mu_basedir}/ec1_softs_installed/00bin
-mkdir ${ec1_root_basedir}/.to_cluster
+mkdir ${ec1_root_basedir}/.2cluster_backup
 echo "created dir ${ec1_root_mu_basedir}"
 
 repositories=(

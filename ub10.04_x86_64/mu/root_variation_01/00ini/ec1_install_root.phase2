@@ -235,7 +235,7 @@ fi
 ec1_mainuser_inidir="${ec1_mainuser_homedir}/.ec1.ini_user"
 mv ${ec1_mainuser_inidir_temp} ${ec1_mainuser_inidir}
 chown ${ec1_mainuser_name}:${ec1_mainuser_name} -R ${ec1_mainuser_inidir}
-chmod 700 -R ${ec1_mainuser_inidir}
+chmod go= -R ${ec1_mainuser_inidir}
 
 ec1_mainuser_ini_certificatesdir="${ec1_mainuser_inidir}/00certificates"
 if [[ ! -d ${ec1_mainuser_ini_certificatesdir} ]]
@@ -279,14 +279,14 @@ aptitude install postfix mailutils -y
 
 
 chmod -R go= ${ec1_root_mu_basedir}
-(cd ${ec1_root_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_root_mu first commit' ; cd ${ec1_root_basedir} ; git clone -l --bare ${ec1_root_mu_basedir} ${ec1_root_mu_basedir}.git ; mv ${ec1_root_mu_basedir}.git ${ec1_root_basedir}/.to_cluster/)
+(cd ${ec1_root_mu_basedir} ; git init ; git add . ; git commit -am 'ec1_root_mu first commit' ; cd ${ec1_root_basedir} ; git clone -l --bare ${ec1_root_mu_basedir} ${ec1_root_mu_basedir}.git ; mv ${ec1_root_mu_basedir}.git ${ec1_root_basedir}/.2cluster_backup/)
 ln -s ${ec1_root_mu_basedir} "${ec1_root_mu_basedir}/00sync/autocommit/"
 
-(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_root_basedir}/.to_cluster/)
+(cd /etc ; git init ; git add . ; git commit -am '/etc first commit' ; cd / ; git clone -l --bare /etc /etc.git ; mv /etc.git ${ec1_root_basedir}/.2cluster_backup/)
 ln -s /etc "${ec1_root_mu_basedir}/00sync/autocommit/"
 
 chmod -R g-w,o= ${ec1_system_ms_basedir}
-(cd ${ec1_system_ms_basedir} ; git init ; git add . ; git commit -am 'ec1_system_ms first commit' ; cd ${ec1_system_basedir} ; git clone -l --bare ${ec1_system_ms_basedir} ${ec1_system_ms_basedir}.git ; mv ${ec1_system_ms_basedir}.git ${ec1_system_basedir}/.to_cluster/)
+(cd ${ec1_system_ms_basedir} ; git init ; git add . ; git commit -am 'ec1_system_ms first commit' ; cd ${ec1_system_basedir} ; git clone -l --bare ${ec1_system_ms_basedir} ${ec1_system_ms_basedir}.git ; mv ${ec1_system_ms_basedir}.git ${ec1_system_basedir}/.2cluster_backup/)
 ln -s ${ec1_system_ms_basedir} "${ec1_root_mu_basedir}/00sync/autocommit/"
 
 
