@@ -107,11 +107,6 @@ do
     fi
 done
 rsync -avh --no-o --no-g --remove-source-files "${ec1_root_ini_datadir}/" "${ec1_root_mu_datadir}/"
-if [[ -d ${ec1_root_ini_datadir} ]]
-then
-    echo "ERROR: can't remove directory ${ec1_root_ini_datadir}" 2>&1
-    exit 1
-fi
 
 # TODO: should also check symlink entity.domain
 ec1_data_root_files=(
@@ -135,6 +130,11 @@ ec1_root_email=$(cat ${ec1_root_mu_datadir}/user.email)
 # importing and checking user mu 00certificates
 mv "${ec1_root_inidir}/dispatch/root/00certificates" "${ec1_root_mu_basedir}/openssh/"
 rmdir -p ${ec1_root_ini_datadir}
+if [[ -d ${ec1_root_ini_datadir} ]]
+then
+    echo "ERROR: can't remove directory ${ec1_root_ini_datadir}" 2>&1
+    exit 1
+fi
 ec1_root_openssh_certificates_dir="${ec1_root_mu_basedir}/openssh/00certificates"
 if [[ ! -f ${ec1_root_openssh_certificates_dir}/user.openssh_defcert ]]
 then
