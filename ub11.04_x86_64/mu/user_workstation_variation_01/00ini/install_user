@@ -24,14 +24,13 @@ mkdir ~/.mc/;
 ln -s ~/.ec1/00mu/mc/00livelinks/ini/ini ~/.mc/;
 ln -s ~/.ec1/00mu/mc/00livelinks/bindings/bindings ~/.mc/;
 #vim
-ln -s ~/.ec1/00mu/vim/00livelinks/.vim/.vim/ ~/;
+ln -s ~/.ec1/00mu/vim/00livelinks/.vim/.vim ~/;
 ln -s ~/.ec1/00mu/vim/00livelinks/.vimrc/.vimrc ~/;
-ln -s ~/.ec1/00mu/vim/00livelinks/.gvimrc/.gvimrc ~/;
 #git
 ln -s ~/.ec1/00mu/git/00livelinks/.gitconfig/.gitconfig ~/;
 #x11
-ln -s ~/.ec1/00mu/x11/00livelinks/.xsession/.xsession ~/;
-ln -s ~/.ec1/00mu/x11/00livelinks/.Xresources/.Xresources ~/;
+ln -s ~/.ec1/00mu/xorg/00livelinks/.xsession/.xsession ~/;
+ln -s ~/.ec1/00mu/xorg/00livelinks/.Xresources/.Xresources ~/;
 #fluxbox
 mkdir ~/.fluxbox;
 ln -s ~/.ec1/00mu/fluxbox/00livelinks/styles/styles ~/.fluxbox/;
@@ -41,7 +40,8 @@ ln -s ~/.ec1/00mu/fluxbox/00livelinks/menu/menu ~/.fluxbox/;
 ln -s ~/.ec1/00mu/fluxbox/00livelinks/keys/keys ~/.fluxbox/;
 #bbpager
 mkdir ~/.bbtools;
-ln -s ~/.ec1/00mu/bbtools/00livelinks/bbpager.rc/bbpager.rc ~/.bbtools/;
+ln -s ~/.ec1/00mu/bbpager/00livelinks/bbpager.rc/bbpager.rc ~/.bbtools/;
+
 #xxkb
 ln -s ~/.ec1/00mu/xxkb/00livelinks/.xxkbrc/.xxkbrc ~/;
 #rvm
