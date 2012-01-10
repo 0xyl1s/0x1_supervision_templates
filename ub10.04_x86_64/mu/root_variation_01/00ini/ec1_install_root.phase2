@@ -194,7 +194,6 @@ ec1_mainuser_inidir_temp="${ec1_root_inidir}/dispatch/mainuser"
 ec1_mainuser_ini_datadir="${ec1_mainuser_inidir_temp}/00data"
 # TODO: should also check symlink entity.domain
 ec1_data_mainuser_files=(
-	${ec1_mainuser_ini_datadir}/authorized_keys
 	${ec1_mainuser_ini_datadir}/user.name
 	${ec1_mainuser_ini_datadir}/user.uid
 	${ec1_mainuser_ini_datadir}/user.gid
@@ -241,7 +240,7 @@ then
 fi
 if [[ ! -f "${ec1_mainuser_ini_certificatesdir}/authorized_keys" ]]
 then
-    echo "ERROR: can't access ec1_data_mainuser_authorized_keys: ${ec1_mainuser_ini_certificatesdir}/authorized_keys" 2>&1
+    echo "ERROR: can't access ec1_mainuser_authorized_keys: ${ec1_mainuser_ini_certificatesdir}/authorized_keys" 2>&1
     exit 1
 fi
 ec1_mainuser_sshdir="${ec1_mainuser_homedir}/.ssh"
