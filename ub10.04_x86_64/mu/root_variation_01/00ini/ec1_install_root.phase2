@@ -267,14 +267,9 @@ mv /etc/shorewall/shorewall.conf ${ec1_root_mu_basedir}/shorewall/00livelinks/sh
 ln -s ${ec1_root_mu_basedir}/shorewall/00livelinks/shorewall.conf/shorewall.conf /etc/shorewall/
 mv /etc/default/shorewall ${ec1_root_mu_basedir}/shorewall/00livelinks/etc_default/shorewall_00ori
 
-
-
-# WARNING : temporary disabling firewall for test systems
-#ln -s ${ec1_root_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
+ln -s ${ec1_root_mu_basedir}/shorewall/00livelinks/etc_default/shorewall /etc/default/
 ufw disable
-#shorewall start
-
-
+shorewall start
 
 # system postfix
 # TODO: check if installing postfix in subsequent phases do not trigger the install of another SMTP server during initial system base installations
