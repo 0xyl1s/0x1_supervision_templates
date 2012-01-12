@@ -1,1 +1,1 @@
-../../../00sourcing/ec1_core_livelinks/ub11.04_x86_64/bash/.bashrc/minimal_01/.bashrc
+../../../00sourcing/ec1_core_livelinks.os/bash/.bashrc/minimal_01/.bashrc
