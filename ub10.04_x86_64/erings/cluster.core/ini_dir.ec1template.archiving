@@ -1,3 +1,0 @@
-cd /3eclipses/production/pima/epiculture/ec1/ec1_supervision_templates/ub10.04_x86_64/erings/cluster.core ; 
-rm ini_dir.ec1template.tar ; 
-tar -cv ./ini_dir.ec1template -f ./ini_dir.ec1template.tar
