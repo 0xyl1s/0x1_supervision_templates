@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/cluster.core/ering.cc01
+# ini_dir.ec1template =>
+# https://raw.github.com/epiculture/ec1_supervision_templates/master/ub10.04_x86_64/erings/cluster.core/ini_dir.ec1template.tar
 
 
 # TODO: comprehensive tests
