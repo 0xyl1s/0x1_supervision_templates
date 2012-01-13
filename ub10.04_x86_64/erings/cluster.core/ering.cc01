@@ -106,6 +106,14 @@ sleep 10
 
 # >>> log end#{{{
 e__datetime_sec > "${ec1_root_home}/.ec1/00mu/.ini_install/logs/ec1.ini.done"
+ec1_mainuser_name="${ec1_root_home}/.ec1/00mu/00data/mainuser.name"
+ec1_system_ready_file="/home/${ec1_mainuser_name}/.ec1.ini_user/ec1.ini.system.ready.ering"
+echo 'ready' > ${ec1_system_ready_file}
+if [[ ! -f ${ec1_system_ready_file} ]]
+then
+    echo "ERROR: can't access ec1_system_ready_file ${ec1_system_ready_file}. But installation seems to be finished anyway :)" 2>&1
+    exit 1
+fi
 #}}}
 
 reboot
