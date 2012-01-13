@@ -256,9 +256,9 @@ ln -s "${ec1_mainuser_ini_certificatesdir}/authorized_keys" "${ec1_mainuser_sshd
 
 # system openssh
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config
-mv /etc/ssh/sshd_config ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
-ln -s ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
-service ssh restart
+#mv /etc/ssh/sshd_config ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config_00ori
+#ln -s ${ec1_root_mu_basedir}/openssh/00livelinks/etc_sshd_config/sshd_config /etc/ssh/
+#service ssh restart
 
 # system shorewall
 ruby -p -i -e "gsub(/@@_ec1_ssh_port_@@/,\"${ec1_machine_ssh_port}\")" ${ec1_root_mu_basedir}/shorewall/00livelinks/00configs/01/ec1/rules
