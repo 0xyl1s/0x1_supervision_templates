@@ -110,6 +110,7 @@ ln -s ${ec1_root_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${ec1_root_home}/
 
 
 ln -s ${ec1_root_mu_basedir}/.recycle ${ec1_root_home}/
+mkdir ${ec1_root_home}/__erase
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
