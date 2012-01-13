@@ -144,7 +144,7 @@ echo "${0} done - $(e__datetime_sec)" >> ${ec1_script_log}
 e__datetime_sec > ${ec1_script_log}.done
 
 ec1_ini_phase_system_done_file="${ec1_root_ini_logsdir}/ec1.ini.system.done.ering"
-echo 'ready' > ${ec1_ini_phase_system_done_file}
+echo 'done' > ${ec1_ini_phase_system_done_file}
 if [[ ! -f ${ec1_ini_phase_system_done_file} ]]
 then
     echo "ERROR: can't access ec1_ini_phase_system_done_file ${ec1_ini_phase_system_done_file}." 2>&1
