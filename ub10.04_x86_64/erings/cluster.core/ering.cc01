@@ -65,7 +65,7 @@ fi
 cat <<EC1HEREDOC > ${ec1_root_home}/.bash_login
 
 source ~/.bashrc
-echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash /root/.ec1.ini/ering.cc01\n\n\n"
+echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash ${ec1_root_inidir}/${0}\n\n\n"
 
 EC1HEREDOC
 chmod 600 ${ec1_root_home}/.bash_login
