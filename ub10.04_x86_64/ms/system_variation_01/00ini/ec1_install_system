@@ -49,34 +49,6 @@ umask 0027
 ufw allow 22/tcp
 ufw --force enable
 
-inidir_openssh_authorized_keys_path="${ec1_root_inidir}/dispatch/mainuser/00certificates/authorized_keys"
-if [[ ! -f ${inidir_openssh_authorized_keys_path} ]]
-then
-    echo "ERROR: can't access authorized_keys (${inidir_openssh_authorized_keys_path})" 2>&1
-    exit 1
-fi
-
-user_ssh_dir="/root/.ssh"
-if [[ -d "${user_ssh_dir}__pre-ec1" ]]
-then
-    echo "ERROR: directory ${user_ssh_dir}__pre-ec1 already exists" 2>&1
-    exit 1
-fi
-if [[ -d ${user_ssh_dir} ]]
-then
-    mv "${user_ssh_dir}" "${user_ssh_dir}__pre-ec1"
-fi
-mkdir ${user_ssh_dir}
-chmod 700 ${user_ssh_dir}
-cp "${inidir_openssh_authorized_keys_path}" "${user_ssh_dir}/"
-user_ssh_authorized_keys="${user_ssh_dir}/authorized_keys"
-if [[ ! -f ${user_ssh_authorized_keys} ]]
-then
-    echo "ERROR: can't access user_ssh_authorized_keys (${user_ssh_authorized_keys})" 2>&1
-    exit 1
-fi
-chmod 600 "${user_ssh_authorized_keys}"
-
 if [[ ! -d ${ec1_system_basedir} ]]
 then
     mkdir ${ec1_system_basedir}

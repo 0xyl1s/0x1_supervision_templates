@@ -159,11 +159,17 @@ do
 done
 
 user_ssh_dir="${ec1_root_home}/.ssh"
-if [[ ! -d ${user_ssh_dir} ]]
+if [[ -d "${user_ssh_dir}__pre-ec1" ]]
 then
-    echo "ERROR: can't access user_ssh_dir (${user_ssh_dir})" 2>&1
+    echo "ERROR: directory ${user_ssh_dir}__pre-ec1 already exists" 2>&1
     exit 1
 fi
+if [[ -d ${user_ssh_dir} ]]
+then
+    mv "${user_ssh_dir}" "${user_ssh_dir}__pre-ec1"
+fi
+mkdir ${user_ssh_dir}
+chmod 700 ${user_ssh_dir}
 ln -s "${ec1_root_mu_basedir}/openssh/00livelinks/config/config" "${user_ssh_dir}/"
 ln -s "${ec1_root_mu_basedir}/openssh/00certificates/id_rsa" "${user_ssh_dir}/"
 ln -s "${ec1_root_mu_basedir}/openssh/00certificates/id_rsa.pub" "${user_ssh_dir}/"
