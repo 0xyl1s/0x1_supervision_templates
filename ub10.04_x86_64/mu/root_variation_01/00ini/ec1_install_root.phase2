@@ -161,7 +161,7 @@ done
 user_ssh_dir="${ec1_root_home}/.ssh"
 if [[ -d "${user_ssh_dir}__pre-ec1" ]]
 then
-    echo "ERROR: directory ${user_ssh_dir}__pre-ec1 already exists" 2>&1
+    echo "ERROR: directory ${user_ssh_dir}__pre-ec1 exists already" 2>&1
     exit 1
 fi
 if [[ -d ${user_ssh_dir} ]]
