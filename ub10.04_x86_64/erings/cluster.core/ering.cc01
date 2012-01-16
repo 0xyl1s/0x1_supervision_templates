@@ -30,8 +30,10 @@ ec1_script_log="${ec1_root_ini_logsdir}/ec1.ini.ering"
 #}}}
 
 # getting ec1_lib
-ec1_lib_standard_file="https://raw.github.com/epiculture/ec1_lib/master/ec1/lib/toolkit/standard.bash"
-(cd ${ec1_root_inidir} ; wget ${ec1_lib_standard_file})
+ec1_lib_standard_file="standard.bash"
+ec1_lib_standard_file_baseuri="https://raw.github.com/epiculture/ec1_lib/master/ec1/lib/toolkit/"
+ec1_lib_standard_file_download_uri="${ec1_lib_standard_file_baseuri}/${ec1_lib_standard_file}"
+(cd ${ec1_root_inidir} ; wget ${ec1_lib_standard_file_download_uri})
 if [[ ! -f ${ec1_lib_standard_file} ]]
 then
     echo "ERROR: can't access ec1_lib_standard_file (${ec1_lib_standard_file})"
