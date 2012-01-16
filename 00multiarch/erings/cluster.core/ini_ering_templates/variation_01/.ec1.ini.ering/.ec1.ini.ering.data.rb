@@ -1,6 +1,8 @@
 module Ec1 module Supervision module Clusters
 
 # system
+# possible values: ub10.04_x86_64 / ub11.04_x86_64
+EC1_MACHINE_OS = ""
 EC1_MACHINE_HOSTNAME = ""
 EC1_MACHINE_SSH_PORT = ""
 EC1_ENTITY_DOMAIN = ""

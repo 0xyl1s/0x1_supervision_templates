@@ -1,0 +1,4 @@
+cd /3eclipses/production/pima/epiculture/ec1/ec1_supervision_templates/00multiarch/erings/cluster.core/ini_ering_templates/variation_01
+rm .ec1.ini.ering
+tar -cv ./.ec1.ini.ering -f ./.ec1.ini.ering.tar
+ls -al --color
