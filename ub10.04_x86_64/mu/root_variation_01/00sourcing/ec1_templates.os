@@ -1,1 +1,0 @@
-ec1_templates/ub10.04_x86_64

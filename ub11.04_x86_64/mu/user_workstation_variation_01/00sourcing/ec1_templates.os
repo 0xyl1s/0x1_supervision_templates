@@ -1,1 +1,0 @@
-ec1_templates/ub11.04_x86_64

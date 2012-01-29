@@ -1,0 +1,7 @@
+".vimrc.0x1local
+
+source ~/.0x1/00mu/00sourcing/0x1_xtra_livelinks/ub11.04_x86_64/vim/.vimrc/extension_01/.vimrc_ext
+
+colorscheme autumnleaf
+
+" vim: ft=vim
