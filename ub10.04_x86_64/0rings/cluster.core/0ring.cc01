@@ -115,7 +115,7 @@ fi
 
 mv ${x_root_home}/.bash_login ${x_root_inidir}/.bash_login__0x1
 mv ${x_root_inidir} ${x_root_home}/.0x1/00mu/.ini_install
-echo "root 0x1 base installation finished: please copy ssh certificates to ${x_root_mu_basedir}/openssh/00certificates/ and activate e.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${x_root_home}/.0x1/00mu/00data/user.email)
+echo "root 0x1 base installation finished: please copy ssh certificates to ${x_root_mu_basedir}/openssh/00certificates/ and activate x.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${x_root_home}/.0x1/00mu/00data/user.email)
 #delay provides extra time for email transmission before reboot, just in case, might not be needed...
 sleep 10
 
