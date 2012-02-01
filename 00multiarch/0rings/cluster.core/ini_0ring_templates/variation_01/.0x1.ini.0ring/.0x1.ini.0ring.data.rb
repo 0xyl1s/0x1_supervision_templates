@@ -1,0 +1,26 @@
+module X module Supervision module Clusters
+
+# system
+# possible values: ub10.04_x86_64 / ub11.04_x86_64
+X_MACHINE_OS = ""
+X_MACHINE_HOSTNAME = ""
+X_MACHINE_SSH_PORT = ""
+X_ENTITY_DOMAIN = ""
+# root
+X_ROOT_NAME = ""
+X_ROOT_EMAIL = ""
+X_ROOT_PASSWORD = ""
+# mainuser
+X_MAINUSER_NAME = ""
+X_MAINUSER_UID = ""
+X_MAINUSER_GID = ""
+X_MAINUSER_EMAIL = ""
+X_MAINUSER_PASSWORD = ""
+X_MAINUSER_AUTHORIZED_KEYS = ""
+# extra
+X_MACHINE_TEMP_IP = ""
+X_MACHINE_TEMP_SSH_PORT = ""
+X_ROOT_SSH_DEFCERT_PASSCODE = ""
+X_MAINUSER_SSH_DEFCERT_PASSCODE = ""
+
+end end end

@@ -1,0 +1,4 @@
+cd /3eclipses/production/pima/0xyl1s/0x1_supervision_templates/00multiarch/0rings/cluster.core/ini_0ring_templates/variation_01
+rm .0x1.ini.0ring
+tar -cv ./.0x1.ini.0ring -f ./.0x1.ini.0ring.tar
+ls -al --color
