@@ -128,6 +128,7 @@ fi
 #UNSURE: sleeping to provide enough time for reboot execution (it seems that subsequent commands called after the execution of this script begin before effective reboot)
 #reboot && sleep 10
 echo "XDEBUG: system install done, press ^c to interrupt"
+sleep 30
 
 # ____________________________________________________________________
 # >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
