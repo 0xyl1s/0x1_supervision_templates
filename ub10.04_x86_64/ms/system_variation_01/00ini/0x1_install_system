@@ -53,9 +53,9 @@ if [[ ! -d ${x_system_basedir} ]]
 then
     mkdir ${x_system_basedir}
     chmod g+s ${x_system_basedir}
-    echo "created dir ${x_system_basedir}"
+    echo "created dir ${x_system_basedir}" >> ${x_script_log}
 else
-    echo "ERROR: directory ${x_system_basedir} exists already" 2>&1
+    echo "ERROR: directory ${x_system_basedir} exists already" >> ${x_script_log}
     exit 1
 fi
 
@@ -68,8 +68,8 @@ repositories=(
 
 for repository in ${repositories[@]}
 do
-    echo "cloning https://github.com/0xyl1s/${repository}.git"
-    git clone git://github.com/0xyl1s/${repository}.git
+    echo "cloning https://github.com/0xyl1s/${repository}.git" >> ${x_script_log}
+    git clone git://github.com/0xyl1s/${repository}.git >> ${x_script_log}
 done
 
 if [[ ! -d ${x_system_basedir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01 ]]
@@ -126,7 +126,8 @@ fi
 #}}}
 
 #UNSURE: sleeping to provide enough time for reboot execution (it seems that subsequent commands called after the execution of this script begin before effective reboot)
-reboot && sleep 10
+#reboot && sleep 10
+echo "XDEBUG: system install done, press ^c to interrupt"
 
 # ____________________________________________________________________
 # >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
