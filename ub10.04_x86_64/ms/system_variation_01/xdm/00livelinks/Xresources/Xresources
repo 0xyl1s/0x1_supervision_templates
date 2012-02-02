@@ -65,7 +65,7 @@ xlogin*hiColor: black
 #endif
 
 #if PLANES >= 8
-xlogin*logoFileName: /.ec1/00mu/00idcom/entity_logo.xpm
+xlogin*logoFileName: /.0x1/00mu/00idcom/entity_logo.xpm
 #else
 xlogin*logoFileName: /usr/share/X11/xdm/pixmaps/ubuntu.xpm
 #endif
