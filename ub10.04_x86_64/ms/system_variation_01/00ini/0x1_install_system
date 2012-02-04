@@ -16,6 +16,7 @@ date +%Y-%m-%d_%H%M%S
 
 # >>> variables#{{{
 x_system_basedir="/.0x1"
+x_system_0xyl1s_repos_dir="${x_system_basedir}/0xyl1s"
 x_system_ms_basedir="${x_system_basedir}/00ms"
 x_system_ms_data_dir="${x_system_basedir}/00ms/00data"
 x_root_inidir=$(cd $(dirname ${0}); pwd)
@@ -59,7 +60,7 @@ else
     exit 1
 fi
 
-cd ${x_system_basedir}
+cd ${x_system_0xyl1s_repos_dir}
 
 repositories=(
 	0x1_system_livelinks
@@ -72,14 +73,14 @@ do
     git clone git://github.com/0xyl1s/${repository}.git >> ${x_script_log}
 done
 
-if [[ ! -d ${x_system_basedir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01 ]]
+if [[ ! -d ${x_system_0xyl1s_repos_dir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01 ]]
 then
-    echo "ERROR: can't access directory ${x_system_basedir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01" 2>&1
+    echo "ERROR: can't access directory ${x_system_0xyl1s_repos_dir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01" 2>&1
     exit 1
 fi
 
-rsync -avh --no-o --no-g --stats ${x_system_basedir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01/ ${x_system_ms_basedir}/
-rm -R ${x_system_basedir}/0x1_supervision_templates
+rsync -avh --no-o --no-g --stats ${x_system_0xyl1s_repos_dir}/0x1_supervision_templates/ub10.04_x86_64/ms/system_variation_01/ ${x_system_ms_basedir}/
+rm -R ${x_system_0xyl1s_repos_dir}/0x1_supervision_templates
 
 #network
 cp /etc/network/interfaces ${x_system_ms_basedir}/network/00livelinks/interfaces/interfaces_00ori

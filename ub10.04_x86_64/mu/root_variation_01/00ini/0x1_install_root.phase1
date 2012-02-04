@@ -21,6 +21,7 @@ x_root_inidir=$(cd $(dirname ${0}); pwd)
 x_root_ini_logsdir="${x_root_inidir}/logs"
 x_root_home="${HOME}"
 x_root_basedir="${x_root_home}/.0x1"
+x_root_0xyl1s_repos_dir="${x_root_home}/.0x1/0xyl1s"
 x_root_mu_basedir="${x_root_home}/.0x1/00mu"
 x_root_mu_data_dir="${x_root_mu_basedir}/00data"
 
@@ -80,12 +81,12 @@ repositories=(
 
 for repository in ${repositories[@]}
 do
-    cd ${x_root_basedir}
+    cd ${x_root_0xyl1s_repos_dir}
     git clone git://github.com/0xyl1s/${repository}.git
 done
 
-rsync -avh --no-o --no-g --stats ${x_root_basedir}/0x1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${x_root_mu_basedir}/
-rm -R ${x_root_basedir}/0x1_supervision_templates
+rsync -avh --no-o --no-g --stats ${x_root_0xyl1s_repos_dir}/0x1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${x_root_mu_basedir}/
+rm -R ${x_root_0xyl1s_repos_dir}/0x1_supervision_templates
 
 #bash
 mv ${x_root_home}/.profile ${x_root_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
