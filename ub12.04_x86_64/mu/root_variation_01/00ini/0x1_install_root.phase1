@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# https://raw.github.com/0xyl1s/0x1_supervision_templates/master/ub10.04_x86_64/mu/root_variation_01/00ini/0x1_install_root.phase1
+
+
+# TODO: comprehensive tests
+
+
+# ____________________________________________________________________
+# >>>>>  0x1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+
+function e__datetime_sec(){
+date +%Y-%m-%d_%H%M%S
+}
+
+# ――――――――――――――――――――――――――――――――――――――#}}}
+
+# >>> variables#{{{
+x_system_basedir="/.0x1"
+x_system_ms_basedir="${x_system_basedir}/00ms"
+x_root_inidir=$(cd $(dirname ${0}); pwd)
+x_root_ini_logsdir="${x_root_inidir}/logs"
+x_root_home="${HOME}"
+x_root_basedir="${x_root_home}/.0x1"
+x_root_0xyl1s_repos_dir="${x_root_home}/.0x1/0xyl1s"
+x_root_mu_basedir="${x_root_home}/.0x1/00mu"
+x_root_mu_data_dir="${x_root_mu_basedir}/00data"
+
+x_script_log="${x_root_ini_logsdir}/0x1.ini.root_phase1"
+#}}}
+
+# >>> log ini#{{{
+if [[ -f ${x_script_log}.done ]]
+then
+    echo "script already runned: ${x_script_log}.done"
+    exit
+fi
+if [[ -f ${x_script_log} ]]
+then
+    echo "ERROR: interrupted script (${0}) execution, see log: ${x_script_log}" 2>&1
+    exit 1
+fi
+echo "${0} start - $(e__datetime_sec)" > ${x_script_log}
+if [[ ! -f ${x_script_log} ]]
+then
+    echo "ERROR: can't write log file ${x_script_log} (from script ${0})" 2>&1
+    exit 1
+fi
+#}}}
+
+umask 0027
+
+groupadd 0x1local
+chgrp -R 0x1local ${x_system_basedir}
+mkdir /00transfert
+chgrp 0x1local /00transfert
+chmod 770 /00transfert
+
+
+if [[ -d ${x_root_basedir} ]]
+then
+    echo "ERROR: directory ${x_root_basedir} exists already" 2>&1
+    exit 1
+fi
+
+mkdir -p ${x_root_mu_basedir}
+mkdir -p ${x_root_mu_basedir}/0x1_softs_installed/00bin
+mkdir ${x_root_basedir}/.2cluster_backup
+echo "created dir ${x_root_mu_basedir}"
+
+repositories=(
+	0x1_lib
+	0x1_core
+	0x1_core_livelinks
+	0x1_xtra
+	0x1_xtra_livelinks
+	0x1_softs_install
+	0x1_templates
+	0x1_supervision
+	0x1_supervision_templates
+	)
+
+for repository in ${repositories[@]}
+do
+    cd ${x_root_0xyl1s_repos_dir}
+    git clone git://github.com/0xyl1s/${repository}.git
+done
+
+rsync -avh --no-o --no-g --stats ${x_root_0xyl1s_repos_dir}/0x1_supervision_templates/ub10.04_x86_64/mu/root_variation_01/ ${x_root_mu_basedir}/
+rm -R ${x_root_0xyl1s_repos_dir}/0x1_supervision_templates
+
+#bash
+mv ${x_root_home}/.profile ${x_root_mu_basedir}/bash/00livelinks/.profile/.profile_00ori
+ln -s ${x_root_mu_basedir}/bash/00livelinks/.profile/.profile ${x_root_home}/
+mv ${x_root_home}/.bashrc ${x_root_mu_basedir}/bash/00livelinks/.bashrc/.bashrc_00ori
+ln -s ${x_root_mu_basedir}/bash/00livelinks/.bashrc/.bashrc ${x_root_home}/
+
+#mc
+mkdir ${x_root_home}/.mc
+ln -s ${x_root_mu_basedir}/mc/00livelinks/ini/ini ${x_root_home}/.mc/
+ln -s ${x_root_mu_basedir}/mc/00livelinks/bindings/bindings ${x_root_home}/.mc/
+
+#screen
+ln -s ${x_root_mu_basedir}/screen/00livelinks/.screenrc/.screenrc ${x_root_home}/
+
+#rvm
+ln -s ${x_root_mu_basedir}/rvm/00livelinks/.rvmrc/.rvmrc ~/
+
+#vim
+ln -s ${x_root_mu_basedir}/vim/00livelinks/.vim/.vim ${x_root_home}/
+ln -s ${x_root_mu_basedir}/vim/00livelinks/.vimrc/.vimrc ${x_root_home}/
+
+
+ln -s ${x_root_mu_basedir}/.recycle ${x_root_home}/
+mkdir ${x_root_home}/__erase
+
+bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
+# >>> log end#{{{
+echo "done - $(e__datetime_sec)" >> ${x_script_log}
+e__datetime_sec > ${x_script_log}.done
+#}}}
+
+# ____________________________________________________________________
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
+# vim: ft=sh

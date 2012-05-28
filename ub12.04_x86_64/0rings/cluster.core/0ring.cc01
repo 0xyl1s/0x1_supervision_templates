@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# https://raw.github.com/0xyl1s/0x1_supervision_templates/master/ub10.04_x86_64/0rings/cluster.core/0ring.cc01
+# ini_dir.0x1template =>
+# https://raw.github.com/0xyl1s/0x1_supervision_templates/master/ub10.04_x86_64/0rings/cluster.core/ini_dir.0x1template.tar
+
+
+# TODO: comprehensive tests
+
+
+# ____________________________________________________________________
+# >>>>>  0x1_lib   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+
+function e__datetime_sec(){
+date +%Y-%m-%d_%H%M%S
+}
+
+# ――――――――――――――――――――――――――――――――――――――#}}}
+
+# >>> variables#{{{
+x_root_home="${HOME}"
+x_system_basedir="/.0x1"
+x_system_ms_basedir="${x_system_basedir}/00ms"
+x_system_ms_data_dir="${x_system_basedir}/00ms/00data"
+x_root_inidir=$(cd $(dirname ${0}); pwd)
+x_root_ini_logsdir="${x_root_inidir}/logs"
+x_os="ub10.04_x86_64"
+x_script_message_prefix="0x1.0ring_cluster.core_${x_os}"
+
+x_script_log="${x_root_ini_logsdir}/0x1.ini.0ring"
+#}}}
+
+# getting 0x1_lib
+x_lib_standard_file="standard.bash"
+x_lib_standard_file_baseuri="https://raw.github.com/0xyl1s/0x1_lib/master/0x1/lib/toolkit/"
+x_lib_standard_file_download_uri="${x_lib_standard_file_baseuri}/${x_lib_standard_file}"
+(cd ${x_root_inidir} ; wget ${x_lib_standard_file_download_uri})
+if [[ ! -f ${x_lib_standard_file} ]]
+then
+    echo "ERROR: can't access x_lib_standard_file (${x_lib_standard_file})"
+    exit 1
+fi
+
+# >>> log ini#{{{
+if [[ -f ${x_script_log}.done ]]
+then
+    echo "script already runned: ${x_script_log}.done"
+    exit
+fi
+if [[ -f ${x_script_log} ]] && [[ ! -f ${x_root_ini_logsdir}/0x1.ini.system.done ]]
+then
+    echo "ERROR: interrupted script (${0}) execution, see log: ${x_script_log}" 2>&1
+    exit 1
+fi
+if [[ ! -f ${x_root_ini_logsdir}/0x1.ini.system.done ]]
+then
+    echo "${0} start - $(e__datetime_sec)" > ${x_script_log}
+fi
+if [[ ! -f ${x_script_log} ]]
+then
+    echo "ERROR: can't write log file ${x_script_log} (from script ${0})" 2>&1
+    exit 1
+fi
+#}}}
+
+umask 077
+
+aptitude install curl git-core -y
+
+# >>> 0x1.ini.system
+if [[ ! -f ${x_root_ini_logsdir}/0x1.ini.system.done ]]
+then
+#adding warning to .bash_login
+if [[ -f ${x_root_home}/.bash_login ]]
+then
+    echo "ERROR: file .bash_login (${x_root_home}/.bash_login) exists already." 2>&1
+    exit 1
+fi
+cat <<0x1HEREDOC > ${x_root_home}/.bash_login
+
+source ~/.bashrc
+echo -e "\n\n\nWARNING !!! UNFINISHED INSTALLATION => please run:\nbash ${x_root_inidir}/${0}\n\n\n"
+
+0x1HEREDOC
+chmod 600 ${x_root_home}/.bash_login
+
+cd ${x_root_inidir} ; wget https://raw.github.com/0xyl1s/0x1_supervision_templates/master/${x_os}/ms/system_variation_01/00ini/0x1_install_system ; chmod 700 ${x_root_inidir}/0x1_install_system ; ${x_root_inidir}/0x1_install_system >> ${x_root_ini_logsdir}/0x1.ini.system.0ring 2>${x_root_ini_logsdir}/0x1.ini.system.error
+
+fi
+# <<< 0x1.ini.system
+
+
+# >>> 0x1.ini.root_phase1
+if [[ -f ${x_root_ini_logsdir}/0x1.ini.system.done ]]
+then
+    cd ${x_root_inidir} ; wget https://raw.github.com/0xyl1s/0x1_supervision_templates/master/${x_os}/mu/root_variation_01/00ini/0x1_install_root.phase1 ; chmod 700 ${x_root_inidir}/0x1_install_root.phase1 ; ${x_root_inidir}/0x1_install_root.phase1 >> ${x_root_ini_logsdir}/0x1.ini.root_phase1.0ring 2>${x_root_ini_logsdir}/0x1.ini.root_phase1.error
+fi
+# <<< 0x1.ini.root_phase1
+
+
+# >>> 0x1.ini.root_phase2
+if [[ -f ${x_root_ini_logsdir}/0x1.ini.root_phase1.done ]]
+then
+    cd ${x_root_inidir} ; wget https://raw.github.com/0xyl1s/0x1_supervision_templates/master/${x_os}/mu/root_variation_01/00ini/0x1_install_root.phase2 ; chmod 700 ${x_root_inidir}/0x1_install_root.phase2 ; ${x_root_inidir}/0x1_install_root.phase2 >> ${x_root_ini_logsdir}/0x1.ini.root_phase2.0ring 2>${x_root_ini_logsdir}/0x1.ini.root_phase2.error
+fi
+# <<< 0x1.ini.root_phase2
+
+
+
+# >>> finishing
+if [[ ! -f ${x_root_ini_logsdir}/0x1.ini.root_phase2.done ]]
+then
+    echo "ERROR: unfinished 0x1.ini.root_phase2 (no done file here: ${x_root_ini_logsdir}/0x1.ini.root_phase2.done)" 2>&1
+    exit 1
+fi
+
+mv ${x_root_home}/.bash_login ${x_root_inidir}/.bash_login__0x1
+mv ${x_root_inidir} ${x_root_home}/.0x1/00mu/.ini_install
+echo "root 0x1 base installation finished: please copy ssh certificates to ${x_root_mu_basedir}/openssh/00certificates/ and activate x.crone command" | mail -s "$(cat /etc/hostname): installation finished" $(cat ${x_root_home}/.0x1/00mu/00data/user.email)
+#delay provides extra time for email transmission before reboot, just in case, might not be needed...
+sleep 10
+
+# >>> log end#{{{
+e__datetime_sec > "${x_root_home}/.0x1/00mu/.ini_install/logs/0x1.ini.done"
+x_mainuser_name="${x_root_home}/.0x1/00mu/00data/mainuser.name"
+x_system_ready_file="/home/${x_mainuser_name}/.0x1.ini_user/0x1.ini.system.ready.0ring"
+echo 'ready' > ${x_system_ready_file}
+if [[ ! -f ${x_system_ready_file} ]]
+then
+    echo "ERROR: can't access x_system_ready_file ${x_system_ready_file}. But installation seems to be finished anyway :)" 2>&1
+    exit 1
+fi
+#}}}
+
+reboot
+
+# <<< 0x1.ini.root_phase2
+
+# ____________________________________________________________________
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
+# vim: ft=sh

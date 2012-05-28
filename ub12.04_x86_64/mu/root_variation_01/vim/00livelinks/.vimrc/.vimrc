@@ -1,0 +1,1 @@
+../../../00sourcing/ec1_xtra_livelinks.os/vim/.vimrc/minimal_01/.vimrc

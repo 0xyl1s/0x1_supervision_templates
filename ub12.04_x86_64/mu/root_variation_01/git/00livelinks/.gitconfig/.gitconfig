@@ -1,0 +1,15 @@
+[color]
+	ui = auto
+[core]
+	editor = /usr/bin/vim
+[alias]
+	l = log --pretty=oneline
+	c = config --global --list
+	cam = commit -am
+	s = status
+	p = pull
+[merge]
+	tool = /usr/bin/gvimdiff
+[user]
+	name = @@_ec1_user_name_@@
+	email = @@_ec1_user_email_@@

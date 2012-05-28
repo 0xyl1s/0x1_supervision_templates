@@ -1,0 +1,11 @@
+
+#Host cc
+ #User user.dummy
+ #HostName 1.2.3.4
+ #Port 65000
+
+#Host cc2
+ #User user2
+ #ProxyCommand ssh -q cc nc -q0 2.3.4.5 65001
+
+# vim: ft=sshconfig

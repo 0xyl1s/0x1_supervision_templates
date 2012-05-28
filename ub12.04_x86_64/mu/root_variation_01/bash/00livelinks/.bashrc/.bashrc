@@ -1,0 +1,1 @@
+../../../00sourcing/ec1_core_livelinks.os/bash/.bashrc/root_minimal_01/.bashrc
